@@ -1,0 +1,329 @@
+# this is an example of the Uber API
+# as a demonstration of an API spec in YAML
+swagger: '2.0'
+info:
+  title: AuthService API
+  description: The Open-O Auth module API document
+  version: "1.0.0"
+# the domain of the service
+host: 
+# array of all schemes that your API supports
+schemes:
+  - http
+# will be prefixed to all paths
+basePath: /openoapi/auth/v1
+produces:
+  - application/json
+paths:
+  /tokens:
+    post:
+      summary: Login by user name and passowrd
+      description: |
+        Login by user name and passowrd.
+      parameters:
+        - name: userName
+          in: query
+          description: The user name to login.
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: The user's password.
+          required: true
+          type: string
+      responses:
+        201:
+          description: After the login, the server will set the token id in the client's cookie as the name of "X-Auth-Token".
+        400:
+          description: Bad Request 
+        401:
+          description: Unauthorized 
+        403:
+          description: Forbidden 
+        404:
+          description: Not Found 
+        405:
+          description: Method Not Allowed 
+        409:
+          description: conflict  
+        413:
+          description: Request Entity Too Large 
+        415:
+          description: Unsupported Media Type  
+        503:
+          description: Service Unavailable 
+    delete:
+      summary: Logout the current user.
+      description: |
+        Logout the current user.
+      parameters:
+        - name: X-Auth-Token
+          in: query
+          description: The current user's token id, which should be set in the request's cookie.
+          required: true
+          type: string
+      responses:
+        201:
+          description: After the login, the server will set the token id in the client's cookie as the name of "X-Auth-Token".
+        400:
+          description: Bad Request 
+        401:
+          description: Unauthorized 
+        403:
+          description: Forbidden 
+        404:
+          description: Not Found 
+        405:
+          description: Method Not Allowed 
+        409:
+          description: conflict  
+        413:
+          description: Request Entity Too Large 
+        415:
+          description: Unsupported Media Type  
+        503:
+          description: Service Unavailable
+    head:
+      summary: Validate the token id.
+      description: |
+        Validate the token id.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: The token id need to be validated.
+          required: true
+          type: string
+      responses:
+        201:
+          description: After the login, the server will set the token id in the client's cookie as the name of "X-Auth-Token".
+        400:
+          description: Bad Request 
+        401:
+          description: Unauthorized 
+        403:
+          description: Forbidden 
+        404:
+          description: Not Found 
+        405:
+          description: Method Not Allowed 
+        413:
+          description: Request Entity Too Large 
+        503:
+          description: Service Unavailable
+  /openoapi/auth/v1/users:
+    post:
+      summary: Create a new user
+      description: |
+        Create a new user. Note: 
+        1. The user's name should follow the rule below:
+        a. Contains a minimum of 5 characters and a maximum of 30;
+        b. Contains only alphanumeric characters(a-z\,A-Z\,0-9);
+        c. Can not contain any special characters except "_",  which only in the middle of the user name;
+        d. Can not contain space.
+        2. The password should follow the rule below:
+        a. Contains a minimum of 8 characters and a maximum of 32; 
+        b. At least contains: one uppercase letter(A-Z), one lowercase letter(a-z), and one digit(0-9), one special character: ~`@#$%^&*-_=+|?/()<>[]{}",.;'! 
+        c. Can not contain any the user name or user name in reverse order; 
+        d. Can not contain space.
+      parameters:
+        - name: userName
+          in: query
+          description: user's name to be created.
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: user's password to be created.
+          required: true
+          type: string
+        - name: description
+          in: query
+          description: user's decription to be created.
+          required: false
+          type: string
+      responses:
+        201:
+          description: The user object which create successfully
+          schema:
+              $ref: '#/definitions/User'
+        400:
+          description: Bad Request 
+        401:
+          description: Unauthorized 
+        403:
+          description: Forbidden 
+        404:
+          description: Not Found 
+        405:
+          description: Method Not Allowed 
+        409:
+          description: conflict  
+        413:
+          description: Request Entity Too Large 
+        415:
+          description: Unsupported Media Type  
+        503:
+          description: Service Unavailable 
+          
+  /openoapi/auth/v1/users/{user_id}:
+    patch:
+      summary: Modify an existing  user
+      description: |
+        Modify an existing  user. Note: 
+        1. Olny description can be modified. 
+      parameters:
+        - name: user_id
+          in: path
+          description: user id that to be modified.
+          required: true
+          type: string
+        - name: description
+          in: query
+          description: user's decription to be created.
+          required: false
+          type: string
+      responses:
+        201:
+          description: The user object which create successfully
+          schema:
+              $ref: '#/definitions/User'
+        400:
+          description: Bad Request 
+        401:
+          description: Unauthorized 
+        403:
+          description: Forbidden 
+        404:
+          description: Not Found 
+        405:
+          description: Method Not Allowed 
+        409:
+          description: conflict  
+        413:
+          description: Request Entity Too Large 
+        415:
+          description: Unsupported Media Type  
+        503:
+          description: Service Unavailable   
+    get:
+      summary: Get an existing user's details
+      description: |
+        Get an existing user's details
+      parameters:
+        - name: user_id
+          in: path
+          description: user id that to get.
+          required: true
+          type: string
+      responses:
+        201:
+          description: The user object which create successfully
+          schema:
+              $ref: '#/definitions/User'
+        400:
+          description: Bad Request 
+        401:
+          description: Unauthorized 
+        403:
+          description: Forbidden 
+        404:
+          description: Not Found 
+        405:
+          description: Method Not Allowed 
+        409:
+          description: conflict  
+        413:
+          description: Request Entity Too Large 
+        415:
+          description: Unsupported Media Type  
+        503:
+          description: Service Unavailable
+    delete:
+      summary: 	Delete an existing user
+      description: |
+        	Delete an existing user
+      parameters:
+        - name: user_id
+          in: path
+          description: user id that to delete.
+          required: true
+          type: string
+      responses:
+        204:
+          description: Delete the user successfully
+        400:
+          description: Bad Request 
+        401:
+          description: Unauthorized 
+        403:
+          description: Forbidden 
+        404:
+          description: Not Found 
+        405:
+          description: Method Not Allowed 
+        409:
+          description: conflict  
+        413:
+          description: Request Entity Too Large 
+        415:
+          description: Unsupported Media Type  
+        503:
+          description: Service Unavailable
+  
+  /openoapi/auth/v1/users/{user_id}/password:
+    post:
+      summary: 	Delete an existing user
+      description: |
+        	Delete an existing user
+      parameters:
+        - name: user_id
+          in: path
+          description: user id that to delete.
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: The new passowrd.
+          required: true
+          type: string
+        - name: original_password
+          in: query
+          description: The old password.
+          required: true
+          type: string
+      responses:
+        204:
+          description: Delete the user successfully
+        400:
+          description: Bad Request 
+        401:
+          description: Unauthorized 
+        403:
+          description: Forbidden 
+        404:
+          description: Not Found 
+        405:
+          description: Method Not Allowed 
+        409:
+          description: conflict  
+        413:
+          description: Request Entity Too Large 
+        415:
+          description: Unsupported Media Type  
+        503:
+          description: Service Unavailable
+
+definitions:
+  User:
+    type: object
+    properties:
+      name:
+        type: string
+        description: User name which create successfully.
+      id:
+        type: string
+        description: User id which create successfully.
+      description:
+        type: string
+        description: User description which create successfully.
+  
