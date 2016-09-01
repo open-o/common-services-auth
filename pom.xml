@@ -5,7 +5,7 @@
         <artifactId>common-setting</artifactId>
         <version>1.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>org.openo.authservice</groupId>
+    <groupId>org.openo.common-services.auth</groupId>
     <artifactId>auth-service-root</artifactId>
     <name>AuthServiceRoot</name>  
     <packaging>pom</packaging>
