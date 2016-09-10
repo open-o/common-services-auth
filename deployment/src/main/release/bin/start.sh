@@ -1,8 +1,6 @@
 #!/bin/bash
-export JAVA_HOME=/opt/openo/rtsp/jre
-export CATALINA_BASE=/opt/openo/apps/AuthService
-export TOMCAT_LOG=../logs
-export CATALINA_HOME=/opt/openo/rtsp/apache-tomcat-7.0.68
+SCRIPT_DIR=`dirname "$0"`
+export APP_ROOT=`cd "$SCRIPT_DIR"/../; pwd`
 
 if [ -z "$JAVA_HOME" ]
 then
@@ -16,24 +14,18 @@ then
     exit 1
 fi
 
-if [ -z "$CATALINA_BASE" ]
+if [ -z "$APP_ROOT" ]
 then
-    echo "There is no CATALINA_BASE"
+    echo "There is no APP_ROOT"
     exit 1
 fi
+
+export CATALINA_BASE=$APP_ROOT
 
 LOG_DIR=$CATALINA_BASE/logs
 if [ ! -d "$LOG_DIR" ]; then
   mkdir $LOG_DIR
 fi
-
-ACCESS_GRP=$OPENO_HOME/groups
-if [ ! -d "$ACCESS_GRP" ];
-then
-    mkdir $ACCESS_GRP
-fi
-
-
 $CATALINA_HOME/bin/catalina.sh start
 
 
