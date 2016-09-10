@@ -239,9 +239,9 @@ paths:
         503:
           description: Service Unavailable
     delete:
-      summary: 	Delete an existing user
+      summary:     Delete an existing user
       description: |
-        	Delete an existing user
+            Delete an existing user
       parameters:
         - name: user_id
           in: path
@@ -272,9 +272,9 @@ paths:
   
   /openoapi/auth/v1/users/{user_id}/password:
     post:
-      summary: 	Delete an existing user
+      summary:     Delete an existing user
       description: |
-        	Delete an existing user
+            Delete an existing user
       parameters:
         - name: user_id
           in: path
