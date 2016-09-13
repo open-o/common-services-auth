@@ -21,7 +21,7 @@ package org.openo.auth.entity;
  * <br/>
  * 
  * @author
- * @version SDNO 0.5
+ * @version  
  */
 public class ModifyUser {
 

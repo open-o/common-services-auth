@@ -27,7 +27,7 @@ import javax.ws.rs.core.Response;
  * <br/>
  * 
  * @author
- * @version     SDNO 0.5
+ * @version  
  */
 public interface IUserDelegate {
 
@@ -38,7 +38,7 @@ public interface IUserDelegate {
      * @param request : HttpServletRequest Object
      * @param response : HttpServletResponse Object
      * @return response for the create user operation.
-     * @since SDNO 0.5
+     * @since  
      */
     Response createUser(HttpServletRequest request, HttpServletResponse response);
 
@@ -50,7 +50,7 @@ public interface IUserDelegate {
      * @param response : HttpServletResponse Object
      * @param userId : user id for which user need to be modified.
      * @return response for the modify user operation.
-     * @since SDNO 0.5
+     * @since  
      */
     Response modifyUser(HttpServletRequest request, HttpServletResponse response, String userId);
 
@@ -62,7 +62,7 @@ public interface IUserDelegate {
      * @param response : HttpServletRequest Object
      * @param userId : user id which needs to be deleted.
      * @return Returns the status for the following operation.
-     * @since SDNO 0.5
+     * @since  
      */
     int deleteUser(HttpServletRequest request, HttpServletResponse response, String userId);
 
@@ -74,7 +74,7 @@ public interface IUserDelegate {
      * @param response : HttpServletRequest Object
      * @param userId : user id for which details needs to be fetched.
      * @return response for the get user details operation
-     * @since SDNO 0.5
+     * @since  
      */
     Response getUserDetails(HttpServletRequest request, HttpServletResponse response, String userId);
     
@@ -85,7 +85,7 @@ public interface IUserDelegate {
      * @param request : HttpServletRequest Object
      * @param response : HttpServletRequest Object
      * @return response for the get user details operation
-     * @since SDNO 0.5
+     * @since  
      */
     Response getUserDetails(HttpServletRequest request, HttpServletResponse response);
 
@@ -98,7 +98,7 @@ public interface IUserDelegate {
      * @param userId : user id for which the password needs to be changed
      * @return Returns the status for the following operation.
      * @throws IOException 
-     * @since SDNO 0.5
+     * @since  
      */
     int modifyPasword(HttpServletRequest request, HttpServletResponse response, String userId) throws IOException;
 

@@ -24,7 +24,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
  * <br/>
  * 
  * @author
- * @version SDNO 0.5
+ * @version  
  */
 public class User {
 

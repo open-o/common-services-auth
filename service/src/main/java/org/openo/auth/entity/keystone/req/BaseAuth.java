@@ -23,7 +23,7 @@ package org.openo.auth.entity.keystone.req;
  * </p>
  * 
  * @author
- * @version     SDNO 0.5  2016年8月3日
+ * @version   
  */
 public class BaseAuth {
 
@@ -35,7 +35,7 @@ public class BaseAuth {
      * <p>
      * </p>
      * 
-     * @since  SDNO 0.5
+     * @since   
      */
     public BaseAuth() {
         super();
@@ -46,7 +46,7 @@ public class BaseAuth {
      * <br/>
      * 
      * @return
-     * @since  SDNO 0.5
+     * @since   
      */
     public Identity getIdentity() {
         return identity;
@@ -57,7 +57,7 @@ public class BaseAuth {
      * <br/>
      * 
      * @param identity
-     * @since  SDNO 0.5
+     * @since   
      */
     public void setIdentity(Identity identity) {
         this.identity = identity;

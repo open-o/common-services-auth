@@ -24,7 +24,7 @@ import org.openo.auth.entity.ModifyUser;
  * <br/>
  * 
  * @author
- * @version SDNO 0.5
+ * @version  
  */
 public class ModifyUserWrapper {
 

@@ -23,7 +23,7 @@ import java.util.List;
  * <br/>
  * 
  * @author
- * @version SDNO 0.5
+ * @version  
  */
 public class UsersWrapper {
 

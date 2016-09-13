@@ -23,7 +23,7 @@ package org.openo.auth.constant;
  * <br/>
  * 
  * @author
- * @version SDNO 0.5
+ * @version  
  */
 
 public final class ErrorCode {

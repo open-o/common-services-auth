@@ -23,7 +23,7 @@ import org.openo.auth.entity.ModifyPassword;
  * <br/>
  * 
  * @author
- * @version SDNO 0.5
+ * @version  
  */
 public class ModifyPwdWrapper {
 

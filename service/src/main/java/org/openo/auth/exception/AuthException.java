@@ -31,7 +31,7 @@ import javax.ws.rs.core.Response;
  * </p>
  * 
  * @author
- * @version SDNO 0.5
+ * @version  
  */
 public class AuthException extends WebApplicationException {
 
@@ -42,7 +42,7 @@ public class AuthException extends WebApplicationException {
      * Construct a new instance with the supplied message and a HTTP status.
      * </p>
      * 
-     * @since SDNO 0.5
+     * @since  
      * @param httpCode : HTTP status code that will be returned to the client
      * @param message : the detail message.
      */
