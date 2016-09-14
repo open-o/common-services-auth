@@ -37,7 +37,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- Only unit tests are run by default. -->
 		<skip.integration.tests>true</skip.integration.tests>
-		<skip.unit.tests>true</skip.unit.tests>
+		<skip.unit.tests>false</skip.unit.tests>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -126,7 +126,7 @@
 				<build.profile.id>all-tests</build.profile.id>
 				<!-- All tests are run. -->
 				<skip.integration.tests>false</skip.integration.tests>
-				<skip.unit.tests>true</skip.unit.tests>
+				<skip.unit.tests>false</skip.unit.tests>
 			</properties>
 		</profile>
 		<profile>
@@ -262,8 +262,7 @@
 				<configuration>
 					<forkMode>always</forkMode>
 					<argLine>${surefireArgLine}</argLine>
-					<skip>true</skip>
-					<skipTests>true</skipTests>
+					<skip>${maven.test.skip}</skip>
 					<testFailureIgnore>${maven.test.failure.ignore}</testFailureIgnore>
 					<!-- Excludes integration tests when unit tests are run. -->
 					<excludes>
