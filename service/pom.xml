@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>org.openo.common-services.auth</groupId>
 		<artifactId>auth-service-root</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>auth-service</artifactId>
 	<name>AuthService</name>
@@ -104,7 +104,7 @@
 		<dependency>
 			<groupId>org.jmockit</groupId>
 			<artifactId>jmockit</artifactId>
-			<version>1.18</version>
+			<version>1.19</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -261,9 +261,9 @@
 				<version>2.19.1</version>
 				<configuration>
 					<forkMode>always</forkMode>
-					<argLine>-javaagent:/home/jenkins/.m2/repository/org/jmockit/jmockit/1.18/jmockit-1.18.jar</argLine>
-					<useSystemClassLoader>true</useSystemClassLoader>
-					<skip>${maven.test.skip}</skip>
+					<argLine>${surefireArgLine}</argLine>
+					<skip>false</skip>
+					<skipTests>false</skipTests>
 					<testFailureIgnore>${maven.test.failure.ignore}</testFailureIgnore>
 					<!-- Excludes integration tests when unit tests are run. -->
 					<excludes>
