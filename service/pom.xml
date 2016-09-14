@@ -262,8 +262,7 @@
 				<configuration>
 					<forkMode>always</forkMode>
 					<argLine>${surefireArgLine}</argLine>
-					<skip>false</skip>
-					<skipTests>false</skipTests>
+					<skip>${skip.unit.tests}</skip>
 					<testFailureIgnore>${maven.test.failure.ignore}</testFailureIgnore>
 					<!-- Excludes integration tests when unit tests are run. -->
 					<excludes>
