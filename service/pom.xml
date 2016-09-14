@@ -261,7 +261,8 @@
 				<version>2.19.1</version>
 				<configuration>
 					<forkMode>always</forkMode>
-					<argLine>${surefireArgLine}</argLine>
+					<argLine>-javaagent:/home/jenkins/.m2/repository/org/jmockit/jmockit/1.18/jmockit-1.18.jar</argLine>
+					<useSystemClassLoader>true</useSystemClassLoader>
 					<skip>${maven.test.skip}</skip>
 					<testFailureIgnore>${maven.test.failure.ignore}</testFailureIgnore>
 					<!-- Excludes integration tests when unit tests are run. -->
