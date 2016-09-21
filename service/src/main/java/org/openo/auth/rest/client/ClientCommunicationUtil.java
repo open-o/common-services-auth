@@ -16,14 +16,19 @@
 
 package org.openo.auth.rest.client;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.apache.http.HttpHeaders;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.openo.auth.common.ConfigUtil;
 import org.openo.auth.common.keystone.KeyStoneConfigInitializer;
@@ -155,10 +160,11 @@ public class ClientCommunicationUtil {
             try {
 
                 if(type.equals(Constant.TYPE_PATCH)) {
-                    client.path(url);
+                    String urlModify = url + "/" + userId;
+                    client.path(urlModify);
                     client.header(Constant.TOKEN_AUTH, authToken);
-                    client.path(Constant.USERID, userId);
-                    userResponse = client.invoke(Constant.TYPE_PATCH, body);
+                    LOGGER.info("Current URI -> " + client.getCurrentURI() + " , auth token = " + authToken);
+                    userResponse = getResponseFromPatchService(String.valueOf(client.getCurrentURI()), authToken, body);
                 } else if(type.equals(Constant.TYPE_POST)) {
                     String urlPassword = url + "/" + userId + "/password";
                     client.path(urlPassword);
@@ -169,7 +175,7 @@ public class ClientCommunicationUtil {
                 }
             } catch(Exception e) {
 
-                LOGGER.error("Exception Caught while connecting client ... " + e);
+                LOGGER.error("Exception Caught while connecting client ... ", e);
                 throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.COMMUNICATION_ERROR);
 
             }
@@ -182,10 +188,49 @@ public class ClientCommunicationUtil {
     }
 
     /**
+     * API for connecting the client and providing the result for the requested api service.
+     * Especially for the PATCH Request, as in JAVA 7, <tt> HTTPURLConnection </tt> does not
+     * support PATCH, the supported methods were :
+     * GET,POST,HEAD,OPTIONS,PUT,DELETE,TRACE
+     * <br/>
+     * 
+     * @param url
+     * @param authToken
+     * @param body
+     * @return
+     * @throws HttpException
+     * @throws IOException
+     * @since SDNO 0.5
+     */
+    private Response getResponseFromPatchService(String url, String authToken, String body)
+            throws HttpException, IOException {
+        PostMethod method = new PostMethod(url) {
+
+            @Override
+            public String getName() {
+                return Constant.TYPE_PATCH;
+            }
+        };
+        method.setRequestHeader(Constant.TOKEN_AUTH, authToken);
+        method.setRequestHeader(HttpHeaders.CONTENT_TYPE, Constant.MEDIA_TYPE_JSON);
+        method.setRequestBody(body);
+
+        HttpClient client = new HttpClient();
+        LOGGER.info("Current URI For HTTP Client -> " + method.getURI());
+
+        client.executeMethod(method);
+        LOGGER.info(
+                "Status Code -> " + method.getStatusCode() + " Response body -> " + method.getResponseBodyAsString());
+
+        return Response.status(method.getStatusCode()).header(Constant.TOKEN_SUBJECT, authToken)
+                .entity(method.getResponseBodyAsStream()).build();
+    }
+
+    /**
      * <br/>
      * 
      * @return
-     * @since  
+     * @since
      */
     private WebClient initializeClient() {
         String baseURL = ConfigUtil.getBaseURL();
