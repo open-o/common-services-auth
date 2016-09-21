@@ -17,6 +17,7 @@
 package org.openo.auth.rest.client;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.httpclient.HttpException;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.openo.auth.constant.Constant;
 import org.openo.auth.constant.ErrorCode;
@@ -172,6 +174,23 @@ public class WebClientMock {
         };
 
     }
+    
+    public void mockClientCommunicationUtil() {
+
+        final Response response =
+                getResponse(HttpServletResponse.SC_OK, Constant.TOKEN_SUBJECT, "tokenValue", "entity", false);
+
+        new MockUp<ClientCommunicationUtil>() {
+
+            @Mock
+            private Response getResponseFromPatchService(String url, String authToken, String body)
+                    throws HttpException, IOException {
+                return response;
+            }
+        };
+
+    }
+
 
     public void mockWebClientNull() {
 

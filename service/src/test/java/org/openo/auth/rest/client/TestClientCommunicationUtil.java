@@ -295,15 +295,15 @@ public class TestClientCommunicationUtil {
         Response response = null;
 
         try {
-            WebClientMock.getInstance().mockWebClient();
+            WebClientMock.getInstance().mockClientCommunicationUtil();
             response = instance.getResponseFromService("testDemoVal", "testDemoVal", "testDemoVal", "testDemoVal",
                     Constant.TYPE_PATCH);
             status = response.getStatus();
         } catch(AuthException e) {
             status = e.getResponse().getStatus();
         }
-        // Assert.assertNotNull(response);
-        // Assert.assertEquals("ok", HttpServletResponse.SC_OK, status);
+         Assert.assertNotNull(response);
+         Assert.assertEquals("ok", HttpServletResponse.SC_OK, status);
 
     }
 
