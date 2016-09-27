@@ -57,7 +57,6 @@ public class TokenServiceImpl implements ITokenDelegate {
      * @return response for the login operation.
      * @since  
      */
-    @Override
     public Response login(HttpServletRequest request, HttpServletResponse response) {
 
         final UserCredentialUI userInfo = CommonUtil.getInstance().getUserInfoCredential(request, response);
@@ -115,7 +114,6 @@ public class TokenServiceImpl implements ITokenDelegate {
      * @return response status for the operation.
      * @since  
      */
-    @Override
     public int logout(HttpServletRequest request, HttpServletResponse response) {
 
         Cookie[] cookies = request.getCookies();
@@ -149,7 +147,6 @@ public class TokenServiceImpl implements ITokenDelegate {
      * @return response status for the operation.
      * @since  
      */
-    @Override
     public int checkToken(HttpServletRequest request, HttpServletResponse response) {
 
         String authToken = request.getHeader(Constant.TOKEN_AUTH);

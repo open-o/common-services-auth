@@ -61,7 +61,6 @@ public class UserServiceImpl implements IUserDelegate {
      * @return response for the create user operation.
      * @since  
      */
-    @Override
     public Response createUser(HttpServletRequest request, HttpServletResponse response) {
 
         Response res = null;
@@ -134,7 +133,6 @@ public class UserServiceImpl implements IUserDelegate {
      * @return response for the modify user operation.
      * @since  
      */
-    @Override
     public Response modifyUser(final HttpServletRequest request, HttpServletResponse response, String userId) {
 
         String authToken = request.getHeader(Constant.TOKEN_AUTH);
@@ -178,7 +176,6 @@ public class UserServiceImpl implements IUserDelegate {
      * @return Returns the status for the following operation.
      * @since  
      */
-    @Override
     public int deleteUser(HttpServletRequest request, HttpServletResponse response, String userId) {
 
         String authToken = request.getHeader(Constant.TOKEN_AUTH);
@@ -203,7 +200,6 @@ public class UserServiceImpl implements IUserDelegate {
      * @return response for the get user details operation
      * @since  
      */
-    @Override
     public Response getUserDetails(HttpServletRequest request, HttpServletResponse response, String userId) {
 
         String authToken = request.getHeader(Constant.TOKEN_AUTH);
@@ -243,7 +239,6 @@ public class UserServiceImpl implements IUserDelegate {
      * @return response for the get user details operation
      * @since  
      */
-    @Override
     public Response getUserDetails(HttpServletRequest request, HttpServletResponse response) {
 
         String authToken = request.getHeader(Constant.TOKEN_AUTH);
@@ -285,7 +280,6 @@ public class UserServiceImpl implements IUserDelegate {
      * @throws IOException
      * @since  
      */
-    @Override
     public int modifyPasword(HttpServletRequest request, HttpServletResponse response, String userId)
             throws IOException {
 
