@@ -82,7 +82,7 @@ public class TokenServiceImpl implements ITokenDelegate {
 
         LOGGER.info("login's token is : " + resp.getHeader());
 
-        return Response.status(status).cookie(new NewCookie(Constant.TOKEN_AUTH, resp.getHeader())).entity("").build();
+        return Response.status(status).cookie(new NewCookie(Constant.TOKEN_AUTH, resp.getHeader())).entity("[]").build();
 
     }
 
