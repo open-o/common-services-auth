@@ -23,7 +23,7 @@
     </parent>
 
     <artifactId>auth-service-deployment</artifactId>
-    <name>AuthServiceDeployment</name>
+    <name>common-services-auth/deployment</name>
     <packaging>pom</packaging>
 
     <properties>
