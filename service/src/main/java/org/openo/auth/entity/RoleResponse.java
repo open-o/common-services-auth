@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 Huawei Technologies Co., Ltd.
+ * Copyright (c) 2016-2017 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,28 +21,40 @@ package org.openo.auth.entity;
  * <br/>
  * 
  * @author
- * @version  
+ * @version
  */
-public class UserCredentialUI {
+public class RoleResponse {
 
-    private String userName;
+    private String id;
 
-    private String password;
+    private String name;
 
-    public String getUserName() {
-        return userName;
+    /**
+     * @return Returns the id.
+     */
+    public String getId() {
+        return id;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    /**
+     * @param id The id to set.
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getPassword() {
-        return password;
+    /**
+     * @return Returns the name.
+     */
+    public String getName() {
+        return name;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    /**
+     * @param name The name to set.
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

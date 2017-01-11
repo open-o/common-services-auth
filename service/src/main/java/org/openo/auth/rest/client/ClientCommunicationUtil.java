@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Huawei Technologies Co., Ltd.
+ * Copyright 2016-2017 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
  * </p>
  * 
  * @author
- * @version  
+ * @version
  */
 public class ClientCommunicationUtil {
 
@@ -55,10 +55,8 @@ public class ClientCommunicationUtil {
 
     /**
      * Constructor<br/>
-     * <p>
-     * </p>
      * 
-     * @since  
+     * @since
      */
     private ClientCommunicationUtil() {
 
@@ -68,7 +66,7 @@ public class ClientCommunicationUtil {
      * <br/>
      * 
      * @return
-     * @since  
+     * @since
      */
     public static ClientCommunicationUtil getInstance() {
         return instance;
@@ -83,7 +81,7 @@ public class ClientCommunicationUtil {
      * @param type : The type of operation like PUT/GET/HEAD , etc.
      * @return userResponse : A <tt> Response </tt> object, which is populated by the result of the
      *         requested api service.
-     * @since  
+     * @since
      */
     public Response getResponseFromService(String url, String input, String type) {
 
@@ -144,7 +142,7 @@ public class ClientCommunicationUtil {
      * @param type : The type of operation like PUT/GET/HEAD , etc.
      * @return userResponse : A <tt> Response </tt> object, which is populated by the result of the
      *         requested api service.
-     * @since  
+     * @since
      */
     public Response getResponseFromService(String url, String authToken, String userId, String body, String type) {
 
@@ -256,7 +254,7 @@ public class ClientCommunicationUtil {
      * @param type : The type of operation like PUT/GET/HEAD , etc.
      * @return userResponse : A <tt> Response </tt> object, which is populated by the result of the
      *         requested api service.
-     * @since  
+     * @since
      */
     public Response getResponseFromService(String url, String authToken, String input, String type) {
 
@@ -294,6 +292,14 @@ public class ClientCommunicationUtil {
 
                     client.path(Constant.USERID, input);
                     userResponse = client.invoke(Constant.TYPE_PATCH, input);
+
+                } else if(type.equals(Constant.TYPE_PUT)) {
+
+                    if(StringUtils.isNotEmpty(input)) {
+                        client.path(Constant.USERID, input);
+                    }
+
+                    userResponse = client.put(null);
 
                 }
             } catch(Exception e) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Huawei Technologies Co., Ltd.
+ * Copyright 2016-2017 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,8 @@ public final class Constant {
     public static final String TYPE_GET = "GET";
 
     public static final String TYPE_PATCH = "PATCH";
+    
+    public static final String TYPE_PUT = "PUT";
 
     public static final String HEADER_X_TOKEN_ID = "X-Token-ID";
 
@@ -76,6 +78,8 @@ public final class Constant {
     public static final String KEYSTONE_IDENTITY_TOKEN = "/v3/auth/tokens";
 
     public static final String KEYSTONE_IDENTITY_USER = "/v3/users";
+    
+    public static final String KEYSTONE_IDENTITY_ROLES = "/v3/roles";
 
     public static final String KEYSTONE_IDENTITY_PROJECTS = "/v3/projects";
 
@@ -88,6 +92,8 @@ public final class Constant {
     public static final String PROJECTID = "{project_id}";
 
     public static final String ROLEID = "{role_id}";
+    
+    public static final String FORWARD_SLASH = "/";
 
     private Constant() {
     }

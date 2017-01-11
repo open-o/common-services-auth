@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Huawei Technologies Co., Ltd.
+ * Copyright 2016-2017 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletResponse;
 
 import org.openo.auth.constant.ErrorCode;
+import org.openo.auth.entity.RoleResponse;
 import org.openo.auth.entity.UserDetailsUI;
 import org.openo.auth.exception.AuthException;
 import org.slf4j.Logger;
@@ -29,23 +30,18 @@ import org.slf4j.LoggerFactory;
 /**
  * Check the user name and password rule.
  * <br/>
- * <p>
- * </p>
  * 
  * @author
- * @version  
+ * @version
  */
 public class CheckUserInfoRule {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CheckUserInfoRule.class);
-    
+
     /**
-     * 
      * Constructor<br/>
-     * <p>
-     * </p>
      * 
-     * @since   
+     * @since
      */
     private CheckUserInfoRule() {
         super();
@@ -56,11 +52,23 @@ public class CheckUserInfoRule {
      * <br/>
      * 
      * @param userInfo
-     * @since  
+     * @since
      */
     public static void checkInfo(UserDetailsUI userInfo) {
         checkUserNameRule(userInfo.getUserName());
         checkPassword(userInfo.getPassword(), userInfo.getUserName());
+    }
+    
+    /**
+     * 
+     * <br/>
+     * 
+     * @param role
+     * @since
+     */
+    public static void checkRoleValidity(RoleResponse role)
+    {
+        checkRoleNameRule(role.getName());
     }
 
     /**
@@ -72,7 +80,7 @@ public class CheckUserInfoRule {
      * <br/>
      * 
      * @param userName
-     * @since  
+     * @since
      */
     private static void checkUserNameRule(String userName) {
 
@@ -99,6 +107,31 @@ public class CheckUserInfoRule {
     }
 
     /**
+     * <br/>
+     * 
+     * @param roleName
+     * @since
+     */
+    private static void checkRoleNameRule(String roleName) {
+
+        if(!checkLength(5, 20, roleName)) {
+            LOGGER.error("User name length is invali.");
+            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
+        }
+
+        if(!checkName(roleName)) {
+            LOGGER.error("User name have illegal characters.");
+            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
+        }
+
+        if(!checkNoSpace(roleName)) {
+            LOGGER.error("User name should not have space.");
+            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
+        }
+
+    }
+
+    /**
      * Check for the password's rule:
      * 1. Length should between 8 to 32;
      * 2. At least contains: one lower case letter(a-z), and one digit(0-9), one special character:
@@ -109,7 +142,7 @@ public class CheckUserInfoRule {
      * 
      * @param password
      * @param userName
-     * @since   
+     * @since
      */
     public static void checkPassword(String password, String userName) {
         if(!checkLength(8, 32, password)) {
@@ -142,7 +175,7 @@ public class CheckUserInfoRule {
      * @param max
      * @param string
      * @return true: only the string's length is equal or between the min and max.
-     * @since  
+     * @since
      */
     private static boolean checkLength(int min, int max, String string) {
         return string.length() >= min && string.length() <= max;
@@ -154,10 +187,21 @@ public class CheckUserInfoRule {
      * 
      * @param string
      * @return true: only contain a-z, A-Z, 0-9, and "_"
-     * @since  
+     * @since
      */
     private static boolean checkNameCharacters(String string) {
         return Pattern.matches("^[a-zA-Z0-9_]+", string);
+    }
+
+    /**
+     * <br/>
+     * 
+     * @param string
+     * @return
+     * @since
+     */
+    private static boolean checkName(String string) {
+        return Pattern.matches("^[a-zA-Z]+", string);
     }
 
     /**
@@ -166,7 +210,7 @@ public class CheckUserInfoRule {
      * 
      * @param string
      * @return false: the "_" is in the first or in the end.
-     * @since  
+     * @since
      */
     private static boolean checkUnderScore(String string) {
         return !(Pattern.matches("^[a-zA-Z0-9_]+_$", string) || Pattern.matches("^_[a-zA-Z1-9_]+", string));
@@ -178,7 +222,7 @@ public class CheckUserInfoRule {
      * 
      * @param userName
      * @return true: no space in the string.
-     * @since  
+     * @since
      */
     private static boolean checkNoSpace(String userName) {
         return !userName.contains(" ");
@@ -191,7 +235,7 @@ public class CheckUserInfoRule {
      * @param password
      * @return true: contain at least: one lower case letter(a-z), and one digit(0-9), one special
      *         character: ~`@#$%^&*-_=+|\?/()<>[]{}",.;'!
-     * @since  
+     * @since
      */
     private static boolean checkPasswordCharacter(String string) {
         return Pattern.matches(".*[A-Z]+.*$", string) && Pattern.matches(".*[a-z]+.*$", string)
@@ -206,7 +250,7 @@ public class CheckUserInfoRule {
      * @param password
      * @param userName
      * @return true: password do not contain the user name and user name reverse.
-     * @since  
+     * @since
      */
     private static boolean checkNoNameOrReverse(String password, String userName) {
         return !password.contains(userName) && !password.contains(reverse(userName));
@@ -218,7 +262,7 @@ public class CheckUserInfoRule {
      * 
      * @param password
      * @return
-     * @since  
+     * @since
      */
     private static String reverse(String password) {
         int length = password.length();
@@ -231,4 +275,5 @@ public class CheckUserInfoRule {
         }
         return String.valueOf(array);
     }
+
 }

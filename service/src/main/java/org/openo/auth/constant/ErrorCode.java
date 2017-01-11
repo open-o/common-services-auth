@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Huawei Technologies Co., Ltd.
+ * Copyright 2016-2017 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,10 +29,14 @@ package org.openo.auth.constant;
 public final class ErrorCode {
 
     public static final String FAILURE_INFORMATION = "failure_information";
+    
+    public static final String PARTIAL_SUCCESS = "partial_success";
 
     public static final String COMMUNICATION_ERROR = "communication_error";
 
     public static final String AUTH_LOAD_FAILED = "auth_load_failed";
+    
+    public static final String DUPLICATE_VALUES = "duplicate_values";
 
     private ErrorCode() {
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Huawei Technologies Co., Ltd.
+ * Copyright 2016-2017 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  * </p>
  * 
  * @author
- * @version  
+ * @version
  */
 public class CommonUtil {
 
@@ -56,7 +56,7 @@ public class CommonUtil {
      * 
      * @return instance : Instance of the <tt>CommonUtil</tt> class.
      * 
-     * @since  
+     * @since
      */
     public static CommonUtil getInstance() {
         return instance;
@@ -70,7 +70,7 @@ public class CommonUtil {
      * @param response : HttpServletResponse
      * @return userInfoCredential : Instance of <tt>UserCredentialUI</tt> contains username and
      *         password.
-     * @since  
+     * @since
      */
     public UserCredentialUI getUserInfoCredential(HttpServletRequest request, HttpServletResponse response) {
 
@@ -92,7 +92,7 @@ public class CommonUtil {
      * @param response : HttpServletResponse
      * @return user : Instance of <tt> UserDetailsUI </tt> class which contains all the
      *         details given by the user.
-     * @since  
+     * @since
      */
     public UserDetailsUI getUserInfo(HttpServletRequest request, HttpServletResponse response) {
 
@@ -114,7 +114,7 @@ public class CommonUtil {
      * @param response : HttpServletResponse
      * @return modifyPwd : Instance of <tt> ModifyPassword </tt> class which contains the password
      *         details.
-     * @since  
+     * @since
      */
     public ModifyPassword modifyPasswordJson(HttpServletRequest request, HttpServletResponse response) {
 
@@ -131,7 +131,6 @@ public class CommonUtil {
 
             throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
         }
-
     }
 
     /**
@@ -142,7 +141,7 @@ public class CommonUtil {
      * @param response : HttpServletResponse
      * @return modifyUser : Instance of <tt> ModifyUser </tt> class which contains the email and
      *         description details.
-     * @since  
+     * @since
      */
     public ModifyUser modifyUserJson(HttpServletRequest request, HttpServletResponse response) {
 

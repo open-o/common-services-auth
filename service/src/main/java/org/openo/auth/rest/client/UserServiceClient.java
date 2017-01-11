@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Huawei Technologies Co., Ltd.
+ * Copyright 2016-2017 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.helpers.IOUtils;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
@@ -157,7 +158,7 @@ public class UserServiceClient {
 
 
         Response userResponse = ClientCommunicationUtil.getInstance()
-                .getResponseFromService(Constant.KEYSTONE_IDENTITY_USER, authToken, "", Constant.TYPE_GET);
+                .getResponseFromService(Constant.KEYSTONE_IDENTITY_USER, authToken, StringUtils.EMPTY, Constant.TYPE_GET);
 
         return makeResponse(userResponse);
     }

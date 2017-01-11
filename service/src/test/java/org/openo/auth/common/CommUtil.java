@@ -23,6 +23,7 @@ import java.util.List;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openo.auth.entity.ModifyPassword;
 import org.openo.auth.entity.ModifyUser;
+import org.openo.auth.entity.RoleResponse;
 import org.openo.auth.entity.UserCredentialUI;
 import org.openo.auth.entity.UserDetailsUI;
 import org.openo.auth.entity.keystone.req.KeyStoneConfiguration;
@@ -62,6 +63,18 @@ public class CommUtil {
 
         }
         return jsonInString;
+    }
+    
+    public List<RoleResponse> getRoleResponse() {
+        List<RoleResponse> list = new ArrayList<RoleResponse>();
+        for (int i=0;i<2;i++)
+        {
+            RoleResponse roleResp = new RoleResponse();
+            roleResp.setId("id"+i);
+            roleResp.setName("name"+i);
+            list.add(roleResp);
+        }
+        return list;
     }
 
     /**

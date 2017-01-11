@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Huawei Technologies Co., Ltd.
+ * Copyright 2016-2017 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,13 @@
 package org.openo.auth.common;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.openo.auth.entity.ModifyPassword;
 import org.openo.auth.entity.ModifyUser;
+import org.openo.auth.entity.RoleResponse;
 import org.openo.auth.entity.UserCredentialUI;
 import org.openo.auth.entity.UserDetailsUI;
 import org.openo.auth.entity.keystone.req.KeyStoneConfiguration;
@@ -36,44 +38,40 @@ import org.openo.auth.entity.keystone.resp.UserCreateWrapper;
  * <br/>
  * 
  * @author
- * @version  
+ * @version
  */
 public interface IJsonService {
-    
+
     /**
-     * 
      * <br/>
      * 
      * @param userInfo
      * @param keyConf
      * @return
-     * @since   
+     * @since
      */
     String getLoginJson(UserCredentialUI userInfo, KeyStoneConfiguration keyConf);
-    
+
     /**
-     * 
      * <br/>
      * 
      * @param inputDetails
      * @param keyConf
      * @return
-     * @since   
+     * @since
      */
     String createUserJson(UserDetailsUI inputDetails, KeyStoneConfiguration keyConf);
-    
+
     /**
-     * 
      * <br/>
      * 
      * @param inputJson
      * @return
-     * @since   
+     * @since
      */
-    String responseForCreateUser(String inputJson);
+    String responseForCreateUser(String userJson, List<RoleResponse> roles);
 
     /**
-     * 
      * <br/>
      * 
      * @param inputJson
@@ -81,49 +79,62 @@ public interface IJsonService {
      * @throws IOException
      * @throws JsonParseException
      * @throws JsonMappingException
-     * @since   
+     * @since
      */
-    UserCreateWrapper keyStoneRespToCreateUserObj(String inputJson)
-            throws IOException;
+    UserCreateWrapper keyStoneRespToCreateUserObj(String inputJson) throws IOException;
 
     /**
-     * 
      * <br/>
      * 
      * @param inputJson
      * @return
-     * @since   
+     * @since
      */
     String responseForMultipleUsers(String inputJson);
 
     /**
-     * 
      * <br/>
      * 
-     * @param inputJson
+     * @param userJson
      * @return
-     * @since   
+     * @since
      */
-    String responseForModifyUser(String inputJson);
+    String responseForModifyUser(String userJson, List<RoleResponse> roles);
 
     /**
-     * 
      * <br/>
      * 
      * @param modifyPwd
      * @return
-     * @since   
+     * @since
      */
     String modifyPasswordJson(ModifyPassword modifyPwd);
 
     /**
-     * 
      * <br/>
      * 
      * @param modifyUser
      * @return
-     * @since   
+     * @since
      */
     String modifyUserJson(ModifyUser modifyUser);
+
+    /**
+     * <br/>
+     * 
+     * @param inputJson
+     * @return
+     * @since
+     */
+    String responseForListRoles(String inputJson);
+
+    /**
+     * <br/>
+     * 
+     * @param inputJson
+     * @return
+     * @since
+     */
+    String responseForListUserRoles(String inputJson);
 
 }

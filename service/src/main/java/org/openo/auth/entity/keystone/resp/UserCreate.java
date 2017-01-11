@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Huawei Technologies Co., Ltd.
+ * Copyright 2016-2017 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,17 @@
 
 package org.openo.auth.entity.keystone.resp;
 
+import java.util.List;
+
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.openo.auth.entity.RoleResponse;
 
 /**
  * A POJO class
  * <br/>
  * 
  * @author
- * @version  
+ * @version
  */
 public class UserCreate {
 
@@ -33,7 +36,7 @@ public class UserCreate {
     private String defaultProjectId;
 
     private String name;
-    
+
     @JsonProperty("domain_id")
     private String domainId;
 
@@ -44,6 +47,16 @@ public class UserCreate {
     private String description;
 
     private String email;
+
+    private List<RoleResponse> roles;
+
+    public List<RoleResponse> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<RoleResponse> roles) {
+        this.roles = roles;
+    }
 
     public String getEmail() {
         return email;
@@ -60,7 +73,7 @@ public class UserCreate {
     public String getDescription() {
         return description;
     }
-    
+
     public String getId() {
         return id;
     }

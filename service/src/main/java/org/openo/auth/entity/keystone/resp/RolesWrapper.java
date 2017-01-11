@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 Huawei Technologies Co., Ltd.
+ * Copyright (c) 2016-2017 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,26 +23,38 @@ import java.util.List;
  * <br/>
  * 
  * @author
- * @version  
+ * @version
  */
-public class UsersWrapper {
+public class RolesWrapper {
 
-    private List<UserCreate> users;
+    private List<Roles> roles;
 
     private Links links;
 
-    public List<UserCreate> getUsers() {
-        return users;
+    /**
+     * @return Returns the roles.
+     */
+    public List<Roles> getRoles() {
+        return roles;
     }
 
-    public void setUsers(List<UserCreate> users) {
-        this.users = users;
+    /**
+     * @param roles The roles to set.
+     */
+    public void setRoles(List<Roles> roles) {
+        this.roles = roles;
     }
 
+    /**
+     * @return Returns the links.
+     */
     public Links getLinks() {
         return links;
     }
 
+    /**
+     * @param links The links to set.
+     */
     public void setLinks(Links links) {
         this.links = links;
     }

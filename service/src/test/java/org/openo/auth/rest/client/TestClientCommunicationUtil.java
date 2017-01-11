@@ -23,6 +23,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openo.auth.common.CommonMockUp;
 import org.openo.auth.constant.Constant;
 import org.openo.auth.exception.AuthException;
 
@@ -47,7 +48,7 @@ public class TestClientCommunicationUtil {
     @Before
     public void setUp() throws Exception {
         instance = ClientCommunicationUtil.getInstance();
-       // CommonMockUp.getInstance().mockConfiguration();
+       CommonMockUp.getInstance().mockConfiguration();
     }
 
     /**

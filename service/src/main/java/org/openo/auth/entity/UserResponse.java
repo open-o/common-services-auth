@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Huawei Technologies Co., Ltd.
+ * Copyright 2016-2017 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 
 package org.openo.auth.entity;
+
+import java.util.List;
 
 /**
  * A POJO class
@@ -32,6 +34,15 @@ public class UserResponse {
     private String email;
 
     private String description;
+
+    private List<RoleResponse> roles;
+
+    public List<RoleResponse> getRoles() {
+        return roles;
+    }
+    public void setRoles(List<RoleResponse> roles) {
+        this.roles = roles;
+    }
 
     public String getEmail() {
         return email;

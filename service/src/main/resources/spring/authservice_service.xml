@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright 2016 Huawei Technologies Co., Ltd.
+  Copyright 2016-2017 Huawei Technologies Co., Ltd.
  
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -34,17 +34,26 @@
     <bean id="tokenDelegate" class="org.openo.auth.service.impl.TokenServiceImpl">
     </bean>
 
-    <bean id="userService" class="org.openo.auth.rest.service.UserService">
-        <property name="userDelegate" ref="userDelegate"></property>
-    </bean>
+	<bean id="userService" class="org.openo.auth.rest.service.UserService">
+		<property name="userDelegate" ref="userDelegate"></property>
+	</bean>
 
-    <bean id="userDelegate" class="org.openo.auth.service.impl.UserServiceImpl">
-    </bean>
+	<bean id="userDelegate" class="org.openo.auth.service.impl.UserServiceImpl">
+		<property name="roleDelegate" ref="roleDelegate"></property>
+	</bean>
+
+	<bean id="roleService" class="org.openo.auth.rest.service.RoleService">
+		<property name="roleDelegate" ref="roleDelegate"></property>
+	</bean>
+
+	<bean id="roleDelegate" class="org.openo.auth.service.impl.RoleServiceImpl">
+	</bean>
 
     <jaxrs:server id="restContainer" address="/">
         <jaxrs:serviceBeans>
             <ref bean="tokenService" />
             <ref bean="userService" />
+            <ref bean="roleService" />
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jsonProvider" />

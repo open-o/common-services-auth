@@ -19,6 +19,7 @@ package org.openo.auth.common;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,7 @@ import org.openo.auth.entity.ClientResponse;
 import org.openo.auth.entity.Configuration;
 import org.openo.auth.entity.ModifyPassword;
 import org.openo.auth.entity.ModifyUser;
+import org.openo.auth.entity.RoleResponse;
 import org.openo.auth.entity.UserDetailsUI;
 import org.openo.auth.entity.keystone.req.KeyStoneConfiguration;
 import org.openo.auth.entity.keystone.resp.UserCreate;
@@ -149,7 +151,7 @@ public class CommonMockUp {
         new MockUp<KeyStoneServiceJson>() {
 
             @Mock
-            public String responseForCreateUser(String inputJson) {
+            public String responseForCreateUser(String inputJson, List<RoleResponse> roles) {
                 return "response";
             }
 
@@ -170,7 +172,7 @@ public class CommonMockUp {
             }
 
             @Mock
-            public String responseForModifyUser(String inputJson) {
+            public String responseForModifyUser(String inputJson, List<RoleResponse> roles) {
                 return "json-response";
             }
 

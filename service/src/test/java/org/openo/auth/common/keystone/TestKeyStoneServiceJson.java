@@ -16,6 +16,8 @@
 
 package org.openo.auth.common.keystone;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.After;
@@ -25,6 +27,7 @@ import org.junit.Test;
 import org.openo.auth.common.CommUtil;
 import org.openo.auth.entity.ModifyPassword;
 import org.openo.auth.entity.ModifyUser;
+import org.openo.auth.entity.RoleResponse;
 import org.openo.auth.entity.UserCredentialUI;
 import org.openo.auth.entity.UserDetailsUI;
 import org.openo.auth.entity.keystone.req.KeyStoneConfiguration;
@@ -33,15 +36,13 @@ import org.openo.auth.entity.keystone.resp.UserModifyWrapper;
 import org.openo.auth.entity.keystone.resp.UsersWrapper;
 import org.openo.auth.exception.AuthException;
 
-//import mockit.Mockit;
-
 /**
  * <br/>
  * <p>
  * </p>
  * 
  * @author
- * @version  
+ * @version
  */
 public class TestKeyStoneServiceJson {
 
@@ -51,7 +52,7 @@ public class TestKeyStoneServiceJson {
      * <br/>
      * 
      * @throws java.lang.Exception
-     * @since  
+     * @since
      */
     @Before
     public void setUp() throws Exception {
@@ -62,11 +63,11 @@ public class TestKeyStoneServiceJson {
      * <br/>
      * 
      * @throws java.lang.Exception
-     * @since  
+     * @since
      */
     @After
     public void tearDown() throws Exception {
-        //Mockit.tearDownMocks(KeyStoneServiceJson.class);
+        // Mockit.tearDownMocks(KeyStoneServiceJson.class);
     }
 
     /**
@@ -173,10 +174,12 @@ public class TestKeyStoneServiceJson {
 
         String inputJson = CommUtil.getInstance().getJsonString(userInfo);
 
+        List<RoleResponse> list = CommUtil.getInstance().getRoleResponse();
+
         String jsonInString = "";
 
         try {
-            jsonInString = instance.responseForCreateUser(inputJson);
+            jsonInString = instance.responseForCreateUser(inputJson, list);
 
         } catch(AuthException e) {
             status = e.getResponse().getStatus();
@@ -195,8 +198,10 @@ public class TestKeyStoneServiceJson {
 
         String inputJson = "Invalid JSON";
 
+        List<RoleResponse> list = CommUtil.getInstance().getRoleResponse();
+
         try {
-            instance.responseForCreateUser(inputJson);
+            instance.responseForCreateUser(inputJson, list);
         } catch(AuthException e) {
             status = e.getResponse().getStatus();
         }
@@ -297,10 +302,12 @@ public class TestKeyStoneServiceJson {
 
         String inputJson = CommUtil.getInstance().getJsonString(userInfo);
 
+        List<RoleResponse> list = CommUtil.getInstance().getRoleResponse();
+
         String jsonInString = "";
 
         try {
-            jsonInString = instance.responseForModifyUser(inputJson);
+            jsonInString = instance.responseForModifyUser(inputJson, list);
 
         } catch(AuthException e) {
             status = e.getResponse().getStatus();
@@ -319,8 +326,10 @@ public class TestKeyStoneServiceJson {
 
         String inputJson = "Invalid JSON";
 
+        List<RoleResponse> list = CommUtil.getInstance().getRoleResponse();
+
         try {
-            instance.responseForModifyUser(inputJson);
+            instance.responseForModifyUser(inputJson, list);
 
         } catch(AuthException e) {
             status = e.getResponse().getStatus();

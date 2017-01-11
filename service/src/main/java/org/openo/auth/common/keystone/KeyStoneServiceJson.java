@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Huawei Technologies Co., Ltd.
+ * Copyright 2016-2017 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,8 @@ import org.openo.auth.constant.Constant;
 import org.openo.auth.constant.ErrorCode;
 import org.openo.auth.entity.ModifyPassword;
 import org.openo.auth.entity.ModifyUser;
+import org.openo.auth.entity.Role;
+import org.openo.auth.entity.RoleResponse;
 import org.openo.auth.entity.UserCredentialUI;
 import org.openo.auth.entity.UserDetailsUI;
 import org.openo.auth.entity.UserResponse;
@@ -47,6 +49,8 @@ import org.openo.auth.entity.keystone.req.Scope;
 import org.openo.auth.entity.keystone.req.User;
 import org.openo.auth.entity.keystone.req.UserLoginInfo;
 import org.openo.auth.entity.keystone.req.UserWrapper;
+import org.openo.auth.entity.keystone.resp.Roles;
+import org.openo.auth.entity.keystone.resp.RolesWrapper;
 import org.openo.auth.entity.keystone.resp.UserCreate;
 import org.openo.auth.entity.keystone.resp.UserCreateWrapper;
 import org.openo.auth.entity.keystone.resp.UserModifyWrapper;
@@ -63,7 +67,7 @@ import org.slf4j.LoggerFactory;
  * <br/>
  * 
  * @author
- * @version  
+ * @version
  */
 public class KeyStoneServiceJson implements IJsonService {
 
@@ -81,7 +85,7 @@ public class KeyStoneServiceJson implements IJsonService {
      * <br/>
      * 
      * @return instance of <tt>KeyStoneServiceJson</tt> class.
-     * @since  
+     * @since
      */
     public static KeyStoneServiceJson getInstance() {
         return instance;
@@ -94,7 +98,7 @@ public class KeyStoneServiceJson implements IJsonService {
      * @param userInfo : Contains the values input from the user.
      * @param keyConf : Default values/configuration set for the KeyStone Service.
      * @return jsonInString : Provides the JSON for KeyStone to perform Login operation.
-     * @since  
+     * @since
      */
     public String getLoginJson(UserCredentialUI userInfo, KeyStoneConfiguration keyConf) {
 
@@ -165,7 +169,7 @@ public class KeyStoneServiceJson implements IJsonService {
      * @param inputDetails : Contains the values input from the user
      * @param keyConf : Default values/configuration set for the KeyStone Service.
      * @return jsonInString : Provides the JSON for KeyStone to perform create user operation.
-     * @since  
+     * @since
      */
     public String createUserJson(UserDetailsUI inputDetails, KeyStoneConfiguration keyConf) {
 
@@ -201,23 +205,22 @@ public class KeyStoneServiceJson implements IJsonService {
      * Provides the filtered response to the user.
      * <br/>
      * 
-     * @param inputJson : Contains the response provided by the KeyStone
+     * @param userJson : Contains the response provided by the KeyStone
      * @return jsonInString : It provides the filtered response to the user.
-     * @since  
+     * @since
      */
-    public String responseForCreateUser(String inputJson) {
+    public String responseForCreateUser(String userJson, List<RoleResponse> roles) {
         String jsonInString = "";
         UserResponse userResp = new UserResponse();
         try {
-            UserCreateWrapper userWrapper = keyStoneRespToCreateUserObj(inputJson);
-
+            UserCreateWrapper userWrapper = keyStoneRespToCreateUserObj(userJson);
             userResp.setId(userWrapper.getUser().getId());
             userResp.setDescription(userWrapper.getUser().getDescription());
             userResp.setName(userWrapper.getUser().getName());
             userResp.setEmail(userWrapper.getUser().getEmail());
+            userResp.setRoles(roles);
 
             ObjectMapper mapperWrite = new ObjectMapper();
-
             jsonInString = mapperWrite.writeValueAsString(userResp);
             LOGGER.info("jsonInString : " + jsonInString);
 
@@ -235,12 +238,264 @@ public class KeyStoneServiceJson implements IJsonService {
      * @param inputJson : Contains the response provided by the KeyStone
      * @return UserCreateWrapper : An Object containing the JSON values provided by KeyStone
      * @throws IOException, JsonParseException, JsonMappingException
-     * @since  
+     * @since
      */
     public UserCreateWrapper keyStoneRespToCreateUserObj(String inputJson) throws IOException {
-        LOGGER.info("getUserInfoCredential");
+        LOGGER.info("keystone resp create/modify user obj, json {}", inputJson);
         ObjectMapper mapperRead = new ObjectMapper();
         return mapperRead.readValue(inputJson, UserCreateWrapper.class);
+    }
+
+    /**
+     * Converting user response to json
+     * <br/>
+     * 
+     * @param userResp : List of user response
+     * @return returning user response to json
+     * @since
+     */
+    private String userResponseToJson(List<UserResponse> userResp) {
+
+        String jsonInString = "";
+
+        ObjectMapper mapperWrite = new ObjectMapper();
+
+        try {
+
+            jsonInString = mapperWrite.writeValueAsString(userResp);
+
+            LOGGER.info("jsonInString : " + jsonInString);
+
+        } catch(Exception e) {
+            LOGGER.error("Exception Caught : " + e);
+            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
+        }
+        return jsonInString;
+    }
+
+    /**
+     * Gets and Create the JSON provided by KeyStone and given to the user.
+     * <br/>
+     * 
+     * @param userJson : Contains the response provided by the KeyStone.
+     * @return jsonInString : It provides the filtered response to the user.
+     * @since
+     */
+    public String responseForModifyUser(String userJson, List<RoleResponse> roles) {
+
+        UserModifyWrapper userWrapper = null;
+        UserResponse userResp = new UserResponse();
+
+        try {
+            LOGGER.info("response for modify user ---> {}", userJson);
+
+            ObjectMapper mapperRead = new ObjectMapper();
+
+            userWrapper = mapperRead.readValue(userJson, UserModifyWrapper.class);
+
+            LOGGER.info("Message Body is parsed not null");
+
+            userResp.setEmail(userWrapper.getUser().getExtra().getEmail());
+            userResp.setId(userWrapper.getUser().getId());
+            userResp.setDescription(userWrapper.getUser().getExtra().getDescription());
+            userResp.setName(userWrapper.getUser().getName());
+            userResp.setRoles(roles);
+
+            return userRespToJson(userResp);
+
+        } catch(Exception e) {
+            LOGGER.error("Exception Caught : " + e);
+            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
+        }
+
+    }
+
+    /**
+     * Converting user response to json
+     * <br/>
+     * 
+     * @param userResp : user response
+     * @return returning user response to json
+     * @since
+     */
+    private String userRespToJson(UserResponse userResp) {
+
+        String jsonInString = "";
+
+        ObjectMapper mapperWrite = new ObjectMapper();
+
+        try {
+            jsonInString = mapperWrite.writeValueAsString(userResp);
+            LOGGER.info("jsonInString : " + jsonInString);
+        } catch(Exception e) {
+            LOGGER.error("Exception Caught : " + e);
+            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
+        }
+        return jsonInString;
+    }
+
+    /**
+     * Provides the JSON for KeyStone to perform Modify password operation.
+     * <br/>
+     * 
+     * @param modifyPwd
+     * @return jsonInString : Provides the JSON for KeyStone to perform Modify password operation.
+     * @since
+     */
+    public String modifyPasswordJson(ModifyPassword modifyPwd) {
+
+        String jsonInString = "";
+
+        ModifyPwdWrapper modifyPwdWrapper = new ModifyPwdWrapper();
+
+        ObjectMapper mapperWrite = new ObjectMapper();
+
+        try {
+
+            if(null == modifyPwd) {
+                throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
+            }
+
+            modifyPwdWrapper.setUser(modifyPwd);
+
+            jsonInString = mapperWrite.writeValueAsString(modifyPwdWrapper);
+
+            LOGGER.info("jsonInString : " + jsonInString);
+
+        } catch(Exception e) {
+            LOGGER.error("Exception Caught : " + e);
+            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
+        }
+        return jsonInString;
+
+    }
+
+    /**
+     * Provides the JSON for KeyStone to perform Modify User operation.
+     * <br/>
+     * 
+     * @param modifyUser : Provides the JSON for KeyStone to perform Modify User operation.
+     * @return
+     * @since
+     */
+
+    public String modifyUserJson(ModifyUser modifyUser) {
+
+        String jsonInString = "";
+
+        ModifyUserWrapper modifyUserWrapper = new ModifyUserWrapper();
+
+        ObjectMapper mapperWrite = new ObjectMapper();
+
+        try {
+
+            if(null == modifyUser) {
+                throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
+            }
+
+            modifyUserWrapper.setUser(modifyUser);
+
+            jsonInString = mapperWrite.writeValueAsString(modifyUserWrapper);
+
+            LOGGER.info("jsonInString : " + jsonInString);
+
+        } catch(Exception e) {
+            LOGGER.error("Exception Caught : " + e);
+            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
+        }
+        return jsonInString;
+
+    }
+
+    /**
+     * Provide the response for listing the roles.
+     * <br/>
+     * 
+     * @param inputJson
+     * @return
+     * @since
+     */
+    public String responseForListRoles(String inputJson) {
+
+        String jsonInString = "";
+        Role roles = roleJsonToRoleObj(inputJson);
+        ObjectMapper mapperWrite = new ObjectMapper();
+        try {
+            jsonInString = mapperWrite.writeValueAsString(roles);
+        } catch(Exception e) {
+            LOGGER.error("Exception Caught : " + e);
+            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
+        }
+        LOGGER.info("jsonInString : " + jsonInString);
+        return jsonInString;
+
+    }
+
+    /**
+     * Convert role json to role object.
+     * <br/>
+     * 
+     * @param inputJson
+     * @since
+     */
+    public Role roleJsonToRoleObj(String inputJson) {
+
+        List<RoleResponse> roleResponse = new ArrayList<RoleResponse>();
+        try {
+            RolesWrapper rolesWrapper = keyStoneRespToListRoles(inputJson);
+
+            for(Roles roles : rolesWrapper.getRoles()) {
+                RoleResponse roleResp = new RoleResponse();
+                roleResp.setId(roles.getId());
+                roleResp.setName(roles.getName());
+                roleResponse.add(roleResp);
+            }
+
+            Role roles = new Role();
+            roles.setRoles(roleResponse);
+            return roles;
+
+        } catch(Exception e) {
+            LOGGER.error("Exception Caught : " + e);
+            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
+        }
+    }
+
+    /**
+     * Provide the response to list user roles.
+     * <br/>
+     * 
+     * @param inputJson
+     * @return
+     * @since
+     */
+    public String responseForListUserRoles(String inputJson) {
+
+        String jsonInString = "";
+        List<RoleResponse> roleResponse = new ArrayList<RoleResponse>();
+
+        try {
+            RolesWrapper rolesWrapper = keyStoneRespToListRoles(inputJson);
+
+            for(Roles roles : rolesWrapper.getRoles()) {
+                RoleResponse roleResp = new RoleResponse();
+                roleResp.setId(roles.getId());
+                roleResp.setName(roles.getName());
+                roleResponse.add(roleResp);
+            }
+
+            Role roles = new Role();
+            roles.setRoles(roleResponse);
+
+            ObjectMapper mapperWrite = new ObjectMapper();
+            jsonInString = mapperWrite.writeValueAsString(roles);
+            LOGGER.info("jsonInString : " + jsonInString);
+
+        } catch(Exception e) {
+            LOGGER.error("Exception Caught : " + e);
+            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
+        }
+        return jsonInString;
     }
 
     /**
@@ -249,7 +504,7 @@ public class KeyStoneServiceJson implements IJsonService {
      * 
      * @param inputJson : Contains the response provided by the KeyStone.
      * @return jsonInString : It provides the filtered response to the user.
-     * @since  
+     * @since
      */
     public String responseForMultipleUsers(String inputJson) {
 
@@ -289,163 +544,18 @@ public class KeyStoneServiceJson implements IJsonService {
     }
 
     /**
-     * Converting user response to json
+     * Converts KeyStone Response to User Create Object
      * <br/>
      * 
-     * @param userResp : List of user response
-     * @return returning user response to json
-     * @since  
+     * @param inputJson : Contains the response provided by the KeyStone
+     * @return UserCreateWrapper : An Object containing the JSON values provided by KeyStone
+     * @throws IOException, JsonParseException, JsonMappingException
+     * @since
      */
-    private String userResponseToJson(List<UserResponse> userResp) {
-
-        String jsonInString = "";
-
-        ObjectMapper mapperWrite = new ObjectMapper();
-
-        try {
-
-            jsonInString = mapperWrite.writeValueAsString(userResp);
-
-            LOGGER.info("jsonInString : " + jsonInString);
-
-        } catch(Exception e) {
-            LOGGER.error("Exception Caught : " + e);
-            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
-        }
-        return jsonInString;
-    }
-
-    /**
-     * Gets and Create the JSON provided by KeyStone and given to the user.
-     * <br/>
-     * 
-     * @param inputJson : Contains the response provided by the KeyStone.
-     * @return jsonInString : It provides the filtered response to the user.
-     * @since  
-     */
-    public String responseForModifyUser(String inputJson) {
-
-        UserModifyWrapper userWrapper = null;
-        UserResponse userResp = new UserResponse();
-
-        try {
-            LOGGER.info("getUserInfoCredential");
-
-            ObjectMapper mapperRead = new ObjectMapper();
-
-            userWrapper = mapperRead.readValue(inputJson, UserModifyWrapper.class);
-
-            LOGGER.info("Message Body is parsed not null");
-
-            userResp.setEmail(userWrapper.getUser().getExtra().getEmail());
-            userResp.setId(userWrapper.getUser().getId());
-            userResp.setDescription(userWrapper.getUser().getExtra().getDescription());
-            userResp.setName(userWrapper.getUser().getName());
-
-            return userRespToJson(userResp);
-
-        } catch(Exception e) {
-            LOGGER.error("Exception Caught : " + e);
-            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
-        }
-
-    }
-
-    /**
-     * Converting user response to json
-     * <br/>
-     * 
-     * @param userResp : user response
-     * @return returning user response to json
-     * @since  
-     */
-    private String userRespToJson(UserResponse userResp) {
-
-        String jsonInString = "";
-
-        ObjectMapper mapperWrite = new ObjectMapper();
-
-        try {
-            jsonInString = mapperWrite.writeValueAsString(userResp);
-            LOGGER.info("jsonInString : " + jsonInString);
-        } catch(Exception e) {
-            LOGGER.error("Exception Caught : " + e);
-            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
-        }
-        return jsonInString;
-    }
-
-    /**
-     * Provides the JSON for KeyStone to perform Modify password operation.
-     * <br/>
-     * 
-     * @param modifyPwd
-     * @return jsonInString : Provides the JSON for KeyStone to perform Modify password operation.
-     * @since  
-     */
-    public String modifyPasswordJson(ModifyPassword modifyPwd) {
-
-        String jsonInString = "";
-
-        ModifyPwdWrapper modifyPwdWrapper = new ModifyPwdWrapper();
-
-        ObjectMapper mapperWrite = new ObjectMapper();
-
-        try {
-
-            if(null == modifyPwd) {
-                throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
-            }
-
-            modifyPwdWrapper.setUser(modifyPwd);
-
-            jsonInString = mapperWrite.writeValueAsString(modifyPwdWrapper);
-
-            LOGGER.info("jsonInString : " + jsonInString);
-
-        } catch(Exception e) {
-            LOGGER.error("Exception Caught : " + e);
-            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
-        }
-        return jsonInString;
-
-    }
-
-    /**
-     * Provides the JSON for KeyStone to perform Modify User operation.
-     * <br/>
-     * 
-     * @param modifyUser : Provides the JSON for KeyStone to perform Modify User operation.
-     * @return
-     * @since  
-     */
-
-    public String modifyUserJson(ModifyUser modifyUser) {
-
-        String jsonInString = "";
-
-        ModifyUserWrapper modifyUserWrapper = new ModifyUserWrapper();
-
-        ObjectMapper mapperWrite = new ObjectMapper();
-
-        try {
-
-            if(null == modifyUser) {
-                throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
-            }
-
-            modifyUserWrapper.setUser(modifyUser);
-
-            jsonInString = mapperWrite.writeValueAsString(modifyUserWrapper);
-
-            LOGGER.info("jsonInString : " + jsonInString);
-
-        } catch(Exception e) {
-            LOGGER.error("Exception Caught : " + e);
-            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
-        }
-        return jsonInString;
-
+    public RolesWrapper keyStoneRespToListRoles(String inputJson) throws IOException {
+        LOGGER.info("get Roles Information");
+        ObjectMapper mapperRead = new ObjectMapper();
+        return mapperRead.readValue(inputJson, RolesWrapper.class);
     }
 
 }

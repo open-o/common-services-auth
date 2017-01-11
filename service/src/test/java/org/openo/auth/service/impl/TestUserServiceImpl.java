@@ -29,15 +29,15 @@ import org.junit.Test;
 import org.openo.auth.common.CommonMockUp;
 import org.openo.auth.exception.AuthException;
 
-
 /**
  * <br/>
  * <p>
  * </p>
  * 
  * @author
- * @version   Jul 26, 2016
+ * @version Jul 26, 2016
  */
+
 public class TestUserServiceImpl {
 
     private UserServiceImpl instance;
@@ -50,7 +50,7 @@ public class TestUserServiceImpl {
      * <br/>
      * 
      * @throws java.lang.Exception
-     * @since  
+     * @since
      */
     @Before
     public void setUp() throws Exception {
@@ -63,11 +63,11 @@ public class TestUserServiceImpl {
      * <br/>
      * 
      * @throws java.lang.Exception
-     * @since  
+     * @since
      */
     @After
     public void tearDown() throws Exception {
-        //Mockit.tearDownMocks(UserServiceImpl.class);
+        // Mockit.tearDownMocks(UserServiceImpl.class);
         CommonMockUp.getInstance().unMockHttpServletRequest();
         CommonMockUp.getInstance().unMockHttpServletResponse();
     }
@@ -114,7 +114,7 @@ public class TestUserServiceImpl {
             status = e.getResponse().getStatus();
         }
 
-        Assert.assertEquals("ok", HttpServletResponse.SC_REQUEST_TIMEOUT, status);
+        Assert.assertEquals("ok", HttpServletResponse.SC_BAD_REQUEST, status);
 
     }
 
@@ -187,7 +187,7 @@ public class TestUserServiceImpl {
     public void testDeleteUserException() {
 
         CommonMockUp.getInstance().mockUserClientException();
-        
+
         int status;
         try {
             status = instance.deleteUser(request, response, "id-1");
@@ -220,7 +220,7 @@ public class TestUserServiceImpl {
             status = e.getResponse().getStatus();
         }
 
-  //      Assert.assertEquals("ok", HttpServletResponse.SC_OK, status);
+        Assert.assertEquals("ok", HttpServletResponse.SC_OK, status);
     }
 
     @Test
@@ -236,7 +236,7 @@ public class TestUserServiceImpl {
             status = e.getResponse().getStatus();
         }
 
-//       Assert.assertEquals("ok", HttpServletResponse.SC_BAD_REQUEST, status);
+        Assert.assertEquals("ok", HttpServletResponse.SC_OK, status);
     }
 
     /**
@@ -282,14 +282,15 @@ public class TestUserServiceImpl {
             status = e.getResponse().getStatus();
         }
 
-       // Assert.assertEquals("ok", HttpServletResponse.SC_BAD_REQUEST, status);
+        Assert.assertEquals("ok", HttpServletResponse.SC_BAD_REQUEST, status);
     }
 
     /**
      * Test method for
      * {@link org.openo.auth.service.impl.UserServiceImpl#modifyPasword(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.String)}
      * .
-     * @throws IOException 
+     * 
+     * @throws IOException
      */
     @Test
     public void testModifyPasword() throws IOException {
