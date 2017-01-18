@@ -1,0 +1,527 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Authentication API.",
+        "description": "Authentication Service is a security service that provide the Open-O Authentication and User Management function.",
+        "version": "1.0.0"
+    },
+    "host": "sdno.openo.org",
+    "schemes": [
+        "https",
+        "http"
+    ],
+    "basePath": "/openoapi/auth/v1",
+    "paths": {
+        "/tokens": {
+            "post": {
+                "summary": "Login by user name and password",
+                "description": "validates user name and password and creates token on successfull authentication",
+                "operationId": "login",
+                "parameters": [
+                    {
+						"in": "body",
+                        "name": "Body",
+                        "description": "Provide required properties of token.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/token"
+                        }
+					}
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "The Token Id. After the login, the server will set the token id in the client's cookie as the name of 'X-Auth-Token'."
+						},
+                    "400": {
+                        "description": "Bad Request."
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+					"403": {
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "description": "Not Found."
+                    },
+					"405": {
+                        "description": "Method Not Allowed."
+                    },
+                    "409": {
+                        "description": "conflict."
+                    },
+					"413": {
+                        "description": "Request Entity Too Large."
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type."
+                    },
+					"503": {
+                        "description": "Service Unavailable."
+                    }
+                }
+            },
+			"delete": {
+                "summary": "Logout the current user",
+                "description": "Logout the current user and clear the sesssion",
+                "operationId": "logout",
+                "parameters": [
+                    {
+						"in": "header",
+                        "name": "X-Auth-Token",
+                        "description": "The client(broswer) will carry the cookie for current user to the server to logout automatically.",
+                        "required": true,
+                        "type": "string"
+					}
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The user logout successfull"
+						},
+                    "400": {
+                        "description": "Bad Request."
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+					"403": {
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "description": "Not Found."
+                    },
+					"405": {
+                        "description": "Method Not Allowed."
+                    },
+                    "409": {
+                        "description": "conflict."
+                    },
+					"413": {
+                        "description": "Request Entity Too Large."
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type."
+                    },
+					"503": {
+                        "description": "Service Unavailable."
+                    }
+                }
+            },
+			"head": {
+                "summary": "Validate the token id",
+                "description": "Validates the token id",
+                "operationId": "validate",
+                "parameters": [
+                    {
+						"in": "header",
+                        "name": "X-Auth-Token",
+                        "description": "If you call this rest api, you should put the 'X-Auth-Token' in the header.Mostly this api is internal used by the check token plugin.",
+                        "required": true,
+                        "type": "string"
+					}
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The token validation successfull."
+						},
+                    "400": {
+                        "description": "Bad Request."
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+					"403": {
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "description": "Not Found."
+                    },
+					"405": {
+                        "description": "Method Not Allowed."
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large."
+                    },
+                    "503": {
+                        "description": "Service Unavailable."
+                    }
+                }
+            }
+        },
+		"/users": {
+            "post": {
+                "summary": "Create a new user",
+                "description": "create user with valid user name and password as per guidelines",
+                "operationId": "create",
+                "parameters": [
+                    {
+						"in": "body",
+                        "name": "Body",
+                        "description": "Provide required properties of user.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user"
+                        }
+					}
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "The user details after successfull creation.",
+						"schema": {
+                            "$ref": "#/definitions/userInfo"
+                        }
+						},
+                    "400": {
+                        "description": "Bad Request."
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+					"403": {
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "description": "Not Found."
+                    },
+					"405": {
+                        "description": "Method Not Allowed."
+                    },
+                    "409": {
+                        "description": "conflict."
+                    },
+					"413": {
+                        "description": "Request Entity Too Large."
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type."
+                    },
+					"503": {
+                        "description": "Service Unavailable."
+                    }
+                }
+            }
+        },
+        "/users/{user_id}":{
+          "patch": {
+                "summary": "Modify an existing user",
+                "description": "Modify an existing user details",
+                "operationId": "modify",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "user_id",
+                        "description": "Put the user id in the URL.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "Body",
+                        "description": "Provide required properties of user.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/userDetails"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The user details after successfull updation.",
+						"schema": {
+                            "$ref": "#/definitions/userInfo"
+                        }
+						},
+                    "400": {
+                        "description": "Bad Request."
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+					"403": {
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "description": "Not Found."
+                    },
+					"405": {
+                        "description": "Method Not Allowed."
+                    },
+                    "409": {
+                        "description": "conflict."
+                    },
+					"413": {
+                        "description": "Request Entity Too Large."
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type."
+                    },
+					"503": {
+                        "description": "Service Unavailable."
+                    }
+                }
+            },
+             "get": {
+                "summary": "Get an existing user's details",
+                "description": "query an existing user details",
+                "operationId": "query",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "user_id",
+                        "description": "Put the user id in the URL.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The user details for the requested user_id.",
+						"schema": {
+                            "$ref": "#/definitions/userInfo"
+                        }
+						},
+                    "400": {
+                        "description": "Bad Request."
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+					"403": {
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "description": "Not Found."
+                    },
+					"405": {
+                        "description": "Method Not Allowed."
+                    },
+					"413": {
+                        "description": "Request Entity Too Large."
+                    },
+					"503": {
+                        "description": "Service Unavailable."
+                    }
+                }
+            },
+             "delete": {
+                "summary": "Delete an existing user",
+                "description": "Delete an existing user details",
+                "operationId": "delete",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "user_id",
+                        "description": "Put the user id in the URL.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "user deletion successfull."
+						},
+                    "400": {
+                        "description": "Bad Request."
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+					"403": {
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "description": "Not Found."
+                    },
+					"405": {
+                        "description": "Method Not Allowed."
+                    },
+                    "409": {
+                        "description": "conflict."
+                    },
+					"413": {
+                        "description": "Request Entity Too Large."
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type."
+                    },
+					"503": {
+                        "description": "Service Unavailable."
+                    }
+                }
+            }
+        },
+		"/openoapi/auth/v1/users/{user_id}/password":{
+          "post": {
+                "summary": "Modify an existing user's password",
+                "description": "modify user password with valid password as per guidelines",
+                "operationId": "modify password",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "user_id",
+                        "description": "Put the user id in the URL.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "Body",
+                        "description": "Provide required properties of user.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/passDetails"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "user deletion successfull."
+						},
+                    "400": {
+                        "description": "Bad Request."
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+					"403": {
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "description": "Not Found."
+                    },
+					"405": {
+                        "description": "Method Not Allowed."
+                    },
+                    "409": {
+                        "description": "conflict."
+                    },
+					"413": {
+                        "description": "Request Entity Too Large."
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type."
+                    },
+					"503": {
+                        "description": "Service Unavailable."
+                    }
+                }
+            }
+			
+        }
+    },
+"definitions": {
+        "token": {
+            "type": "object",
+            "description": "login token creation information.",
+            "required": [
+                "userName",
+                "password"
+            ],
+            "properties": {
+                "userName": {
+                    "type": "string",
+                    "description": " the user's name."
+                },
+                "password": {
+                    "type": "string",
+                    "description": " the user's password."
+                }
+				}
+        },
+		"user": {
+            "type": "object",
+            "description": "user information.",
+            "required": [
+                "userName",
+                "password"
+            ],
+            "properties": {
+				"description": {
+                    "type": "string",
+                    "description": " the user's description."
+                },
+                "userName": {
+                    "type": "string",
+                    "description": " the user's name."
+                },
+                "password": {
+                    "type": "string",
+                    "description": " the user's password."
+                }
+				}
+        },
+		"userInfo": {
+            "type": "object",
+            "description": "user information.",
+            "properties": {
+				"description": {
+                    "type": "string",
+                    "description": " the user's description."
+                },
+                "userName": {
+                    "type": "string",
+                    "description": " the user's name."
+                },
+                "id": {
+                    "type": "string",
+                    "description": "the user's id after successfull creation."
+                }
+				}
+        },
+		"userDetails": {
+            "type": "object",
+            "description": "user information.",
+            "required": [
+                "description"
+			],
+            "properties": {
+				"description": {
+                    "type": "string",
+                    "description": " the user's description."
+                }
+				}
+        },
+		"passDetails": {
+            "type": "object",
+            "description": "user information.",
+            "required": [
+                "original_password",
+				"password"
+			],
+            "properties": {
+				"original_password": {
+                    "type": "string",
+                    "description": " the user's old password."
+                },
+				"password": {
+                    "type": "string",
+                    "description": " the user's new password."
+                }
+				}
+        }
+    }
+}

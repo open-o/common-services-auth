@@ -43,7 +43,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author
  * @version  
  */
-@Path("/users")
+@Path("/auth/v1/users")
 public class UserService {
 
     @Autowired

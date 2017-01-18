@@ -48,12 +48,15 @@
 
 	<bean id="roleDelegate" class="org.openo.auth.service.impl.RoleServiceImpl">
 	</bean>
+	    <bean id="swaggerRoa" class="org.openo.auth.rest.service.SwaggerRoa">
+    </bean>
 
     <jaxrs:server id="restContainer" address="/">
         <jaxrs:serviceBeans>
             <ref bean="tokenService" />
             <ref bean="userService" />
             <ref bean="roleService" />
+            <ref bean="swaggerRoa" />
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jsonProvider" />

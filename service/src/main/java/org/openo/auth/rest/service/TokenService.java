@@ -39,7 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author
  * @version  
  */
-@Path("/tokens")
+@Path("/auth/v1/tokens")
 public class TokenService {
 
     @Autowired
