@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
  * <b>Currently, Auth Service supports only KeyStone Service</b>
  * 
  * @author
- * @version  
+ * @version
  */
 public class ConfigUtil {
 
@@ -61,7 +61,7 @@ public class ConfigUtil {
      * <p>
      * </p>
      * 
-     * @since  
+     * @since
      */
     private ConfigUtil() {
     }
@@ -72,7 +72,7 @@ public class ConfigUtil {
      * 
      * @return conf : Instance of <tt> Configuration </tt> class, which holds the configuration
      *         values provided by user in the <tt> auth_service.properties </tt>/
-     * @since  
+     * @since
      */
     public static Configuration loadConfigProperties() {
 
@@ -101,6 +101,10 @@ public class ConfigUtil {
 
         conf.setService(properties.getProperty(Constant.AUTH_CONF_SERVICE));
 
+        conf.setPolicy(Constant.AUTH_CONF_POLICY);
+
+        conf.setRights(Constant.AUTH_CONF_RIGHTS);
+
         LOGGER.info("Service Name = " + conf.getService());
 
         return conf;
@@ -113,7 +117,7 @@ public class ConfigUtil {
      * 
      * @return conf: Return the base url for the service which is to be communicate for the
      *         Authentication.
-     * @since  
+     * @since
      */
     public static String getBaseURL() {
 
@@ -129,7 +133,7 @@ public class ConfigUtil {
      * <br/>
      * 
      * @return Service Name : It will return either the service name or it will return null
-     * @since  
+     * @since
      */
     public static String getServiceName() {
 
@@ -138,10 +142,38 @@ public class ConfigUtil {
             config = loadConfigProperties();
 
             LOGGER.info("Service Name = " + config.getService());
-            
+
         }
 
         return config.getService();
+
+    }
+
+    public static String getPolicyPath() {
+
+        if(null == config) {
+
+            config = loadConfigProperties();
+
+            LOGGER.info("Service Name = " + config.getService());
+
+        }
+
+        return config.getPolicy();
+
+    }
+
+    public static String getRightsPath() {
+
+        if(null == config) {
+
+            config = loadConfigProperties();
+
+            LOGGER.info("Service Name = " + config.getService());
+
+        }
+
+        return config.getRights();
 
     }
 

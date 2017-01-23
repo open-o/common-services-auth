@@ -37,6 +37,8 @@ public final class ErrorCode {
     public static final String AUTH_LOAD_FAILED = "auth_load_failed";
     
     public static final String DUPLICATE_VALUES = "duplicate_values";
+    
+    public static final String SERVICE_LOAD_FAILED = "service_load_failed";
 
     private ErrorCode() {
     }

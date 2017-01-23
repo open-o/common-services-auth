@@ -90,8 +90,6 @@ public class TestUserServiceImpl {
 
         CommonMockUp.getInstance().mockKeyStoneServiceJson();
 
-        CommonMockUp.getInstance().mockForUserService();
-
         int status;
         try {
             Response res = instance.createUser(request, response);
@@ -135,8 +133,6 @@ public class TestUserServiceImpl {
         CommonMockUp.getInstance().mockUserClient();
 
         CommonMockUp.getInstance().mockKeyStoneServiceJson();
-
-        CommonMockUp.getInstance().mockForUserService();
 
         int status;
         try {
@@ -210,8 +206,6 @@ public class TestUserServiceImpl {
 
         CommonMockUp.getInstance().mockKeyStoneServiceJson();
 
-        CommonMockUp.getInstance().mockForUserService();
-
         int status;
         try {
             Response res = instance.getUserDetails(request, response, "id");
@@ -256,8 +250,6 @@ public class TestUserServiceImpl {
         CommonMockUp.getInstance().mockUserClient();
 
         CommonMockUp.getInstance().mockKeyStoneServiceJson();
-
-        CommonMockUp.getInstance().mockForUserService();
 
         int status;
         try {
@@ -304,8 +296,6 @@ public class TestUserServiceImpl {
         CommonMockUp.getInstance().mockUserClient();
 
         CommonMockUp.getInstance().mockKeyStoneServiceJson();
-
-        CommonMockUp.getInstance().mockForUserService();
 
         int status;
         try {

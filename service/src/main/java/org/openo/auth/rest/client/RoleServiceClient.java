@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response;
@@ -30,12 +31,15 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.helpers.IOUtils;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.openo.auth.common.ConfigUtil;
 import org.openo.auth.common.keystone.KeyStoneConfigInitializer;
 import org.openo.auth.constant.Constant;
 import org.openo.auth.constant.ErrorCode;
 import org.openo.auth.entity.ClientResponse;
 import org.openo.auth.entity.keystone.req.KeyStoneConfiguration;
+import org.openo.auth.entity.keystone.resp.Project;
+import org.openo.auth.entity.keystone.resp.ProjectWrapper;
 import org.openo.auth.exception.AuthException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,7 +106,8 @@ public class RoleServiceClient {
         // getUrlForRoleOperations(userId, "") api.
 
         Response userResponse = ClientCommunicationUtil.getInstance().getResponseFromService(
-                getUrlForRoleOperations(userId, StringUtils.EMPTY), authToken, StringUtils.EMPTY, Constant.TYPE_GET);
+                getUrlForRoleOperations(authToken, userId, StringUtils.EMPTY), authToken, StringUtils.EMPTY,
+                Constant.TYPE_GET);
 
         return makeResponse(userResponse);
     }
@@ -215,13 +220,19 @@ public class RoleServiceClient {
         return response;
     }
 
-    private String getUrlForRoleOperations(String userId, String roleId) {
+    private String getUrlForRoleOperations(String authToken, String userId, String roleId) {
 
         String url = StringUtils.EMPTY;
 
         KeyStoneConfiguration keyConf = KeyStoneConfigInitializer.getKeystoneConfiguration();
 
         String projectId = keyConf.getProjectId();
+
+        if(StringUtils.isEmpty(projectId)) {
+            projectId = getProjectIdFromName(authToken, keyConf.getProjectName());
+            keyConf.setProjectId(projectId);
+            writeToKeyConfProperties(projectId);
+        }
 
         if(StringUtils.isEmpty(roleId)) {
             url = Constant.KEYSTONE_IDENTITY_PROJECTS + Constant.FORWARD_SLASH + projectId + Constant.USERS
@@ -243,7 +254,7 @@ public class RoleServiceClient {
         Map<String, ClientResponse> removedRoleResp = new HashMap<String, ClientResponse>();
 
         for(Map.Entry<String, String> entry : rolesToRemove.entrySet()) {
-            String url = getUrlForRoleOperations(userId, entry.getKey());
+            String url = getUrlForRoleOperations(authToken, userId, entry.getKey());
 
             Response userResponse = ClientCommunicationUtil.getInstance().getResponseFromService(url, authToken,
                     StringUtils.EMPTY, Constant.TYPE_DELETE);
@@ -262,7 +273,7 @@ public class RoleServiceClient {
         Map<String, ClientResponse> assignedRoleResp = new HashMap<String, ClientResponse>();
 
         for(Map.Entry<String, String> entry : rolesToAssign.entrySet()) {
-            String url = getUrlForRoleOperations(userId, entry.getKey());
+            String url = getUrlForRoleOperations(authToken, userId, entry.getKey());
 
             Response userResponse = ClientCommunicationUtil.getInstance().getResponseFromService(url, authToken,
                     StringUtils.EMPTY, Constant.TYPE_PUT);
@@ -270,6 +281,79 @@ public class RoleServiceClient {
             assignedRoleResp.put(entry.getKey(), response);
         }
         return assignedRoleResp;
+    }
+
+    private String getProjectIdFromName(String authToken, String projectName) {
+        ClientResponse clientResponse = getProjectDetails(authToken);
+        String projectJson = clientResponse.getBody();
+        LOGGER.info("Project Json = {}", projectJson);
+        ProjectWrapper proj = getObjFromJson(projectJson);
+        if(null != proj) {
+            List<Project> projectList = proj.getProjects();
+            if(null != projectList && 0 < projectList.size()) {
+                for(Project project : projectList) {
+                    if(project.getName().equalsIgnoreCase(projectName)) {
+                        return project.getId();
+                    }
+                }
+            }
+        }
+        return StringUtils.EMPTY;
+    }
+
+    private ProjectWrapper getObjFromJson(String inputJson) {
+
+        ObjectMapper mapperRead = new ObjectMapper();
+
+        ProjectWrapper project = new ProjectWrapper();
+
+        try {
+            project = mapperRead.readValue(inputJson, ProjectWrapper.class);
+        } catch(Exception e) {
+
+            LOGGER.error("Exception Caught " + e);
+
+            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
+        }
+        return project;
+    }
+
+    private void writeToKeyConfProperties(String projectId) {
+
+        LOGGER.info("Loading...{}, for writhing project id ", Constant.KEYSTONE_CONF_PROPERTIES);
+
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
+        Properties properties = new Properties();
+        try {
+            properties.load(classLoader.getResourceAsStream(Constant.KEYSTONE_CONF_PROPERTIES));
+        } catch(IOException e) {
+
+            LOGGER.error("Exception Caught " + e);
+
+            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
+        }
+
+        properties.setProperty(Constant.KEYSTONE_CONF_PROJECT_ID, projectId);
+        LOGGER.info("Setting the project id in the keystone config file, project id = {} = ", projectId);
+    }
+
+    /**
+     * Fetches the user details of all users.
+     * <br/>
+     * 
+     * @param userId : user id for which user details need to be fetched.
+     * @param authToken : Auth Token, representing the current session.
+     * @return response : An Object which has status header and body, for which the value is set
+     *         according to the response given by the Service Client.
+     * @since
+     */
+    public ClientResponse getProjectDetails(String authToken) {
+
+        Response userResponse = ClientCommunicationUtil.getInstance().getResponseFromService(
+                Constant.KEYSTONE_IDENTITY_PROJECTS, authToken, StringUtils.EMPTY, Constant.TYPE_GET);
+
+        return makeResponse(userResponse);
     }
 
 }

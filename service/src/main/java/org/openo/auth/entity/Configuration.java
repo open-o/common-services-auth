@@ -21,7 +21,7 @@ package org.openo.auth.entity;
  * <br/>
  * 
  * @author
- * @version  
+ * @version
  */
 public class Configuration {
 
@@ -30,6 +30,26 @@ public class Configuration {
     private String portNo;
 
     private String service;
+
+    private String policy;
+
+    private String rights;
+
+    public String getPolicy() {
+        return policy;
+    }
+
+    public void setPolicy(String policy) {
+        this.policy = policy;
+    }
+
+    public String getRights() {
+        return rights;
+    }
+
+    public void setRights(String rights) {
+        this.rights = rights;
+    }
 
     public String getIpAddr() {
         return ipAddr;

@@ -37,7 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author
  * @version
  */
-@Path("/roles")
+@Path("/auth/v1/roles")
 public class RoleService {
 
     @Autowired

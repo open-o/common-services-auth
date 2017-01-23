@@ -370,23 +370,4 @@ public class UserServiceImpl implements IUserDelegate {
 
     }
 
-    /**
-     * Assigning Default Role and Default Project to the users created.
-     * <br/>
-     * 
-     * @param authToken : Auth Token, representing the current session.
-     * @param keyConf : Default KeyStone configuration
-     * @param userId : userId for which roles need to be assigned.
-     * @return Return the status for the operation.
-     * @since
-     */
-    private int assignRolesToUser(String authToken, KeyStoneConfiguration keyConf, String userId) {
-
-        String projectId = keyConf.getProjectId();
-
-        String roleId = keyConf.getRoleId();
-
-        return UserServiceClient.getInstance().assignRolesToUser(authToken, projectId, userId, roleId);
-    }
-
 }

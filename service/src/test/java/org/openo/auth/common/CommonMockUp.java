@@ -38,7 +38,6 @@ import org.openo.auth.entity.keystone.resp.UserCreate;
 import org.openo.auth.entity.keystone.resp.UserCreateWrapper;
 import org.openo.auth.rest.client.TokenServiceClient;
 import org.openo.auth.rest.client.UserServiceClient;
-import org.openo.auth.service.impl.UserServiceImpl;
 
 import mockit.Mock;
 import mockit.MockUp;
@@ -50,7 +49,7 @@ import mockit.MockUp;
  * <br/>
  * 
  * @author
- * @version  
+ * @version
  */
 public class CommonMockUp {
 
@@ -84,7 +83,7 @@ public class CommonMockUp {
      * <br/>
      * 
      * @param value
-     * @since  
+     * @since
      */
     public HttpServletRequest mockRequestInputStream(final String value) {
         HttpServletRequest request = new MockUp<HttpServletRequest>() {
@@ -104,7 +103,7 @@ public class CommonMockUp {
      * <br/>
      * 
      * @param value
-     * @since  
+     * @since
      */
     public KeyStoneConfiguration mockKeystoneConfiguration() {
 
@@ -131,7 +130,7 @@ public class CommonMockUp {
      * <br/>
      * 
      * @param value
-     * @since  
+     * @since
      */
     public void mockJsonFactory() {
 
@@ -184,23 +183,11 @@ public class CommonMockUp {
         };
     }
 
-    public void mockForUserService() {
-
-        new MockUp<UserServiceImpl>() {
-
-            @Mock
-            private int assignRolesToUser(String authToken, KeyStoneConfiguration keyConf, String userId) {
-                return HttpServletResponse.SC_OK;
-            }
-
-        };
-    }
-
     /**
      * <br/>
      * 
      * @param value
-     * @since  
+     * @since
      */
     public ClientResponse mockTokenClientDoLogin() {
 

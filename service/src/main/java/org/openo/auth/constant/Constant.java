@@ -34,6 +34,10 @@ public final class Constant {
     public static final String AUTH_CONF_PORT = "PORT";
 
     public static final String AUTH_CONF_SERVICE = "SERVICE";
+    
+    public static final String AUTH_CONF_POLICY = "POLICY";
+    
+    public static final String AUTH_CONF_RIGHTS = "RIGHTS";
 
     public static final String TYPE_POST = "POST";
 
