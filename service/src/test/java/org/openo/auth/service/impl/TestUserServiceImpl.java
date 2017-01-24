@@ -274,7 +274,7 @@ public class TestUserServiceImpl {
             status = e.getResponse().getStatus();
         }
 
-        Assert.assertEquals("ok", HttpServletResponse.SC_BAD_REQUEST, status);
+        Assert.assertEquals("ok", HttpServletResponse.SC_OK, status);
     }
 
     /**

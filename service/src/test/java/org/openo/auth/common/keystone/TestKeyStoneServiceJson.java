@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Huawei Technologies Co., Ltd.
+ * Copyright 2016-2017 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -258,7 +259,7 @@ public class TestKeyStoneServiceJson {
         String jsonInString = "";
 
         try {
-            jsonInString = instance.responseForMultipleUsers(inputJson);
+            jsonInString = instance.responseForMultipleUsers(inputJson, null, StringUtils.EMPTY);
 
         } catch(AuthException e) {
             status = e.getResponse().getStatus();
@@ -278,7 +279,7 @@ public class TestKeyStoneServiceJson {
         String inputJson = "Invalid JSON";
 
         try {
-            instance.responseForMultipleUsers(inputJson);
+            instance.responseForMultipleUsers(inputJson,null,StringUtils.EMPTY);
 
         } catch(AuthException e) {
             status = e.getResponse().getStatus();

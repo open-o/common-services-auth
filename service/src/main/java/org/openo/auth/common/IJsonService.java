@@ -28,6 +28,7 @@ import org.openo.auth.entity.UserCredentialUI;
 import org.openo.auth.entity.UserDetailsUI;
 import org.openo.auth.entity.keystone.req.KeyStoneConfiguration;
 import org.openo.auth.entity.keystone.resp.UserCreateWrapper;
+import org.openo.auth.service.inf.IRoleDelegate;
 
 /**
  * <p>
@@ -90,7 +91,7 @@ public interface IJsonService {
      * @return
      * @since
      */
-    String responseForMultipleUsers(String inputJson);
+    String responseForMultipleUsers(String inputJson, IRoleDelegate roleDelegate, String authToken);
 
     /**
      * <br/>

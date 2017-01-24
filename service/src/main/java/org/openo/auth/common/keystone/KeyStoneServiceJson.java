@@ -56,6 +56,7 @@ import org.openo.auth.entity.keystone.resp.UserCreateWrapper;
 import org.openo.auth.entity.keystone.resp.UserModifyWrapper;
 import org.openo.auth.entity.keystone.resp.UsersWrapper;
 import org.openo.auth.exception.AuthException;
+import org.openo.auth.service.inf.IRoleDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -506,7 +507,7 @@ public class KeyStoneServiceJson implements IJsonService {
      * @return jsonInString : It provides the filtered response to the user.
      * @since
      */
-    public String responseForMultipleUsers(String inputJson) {
+    public String responseForMultipleUsers(String inputJson, IRoleDelegate roleDelegate, String authToken) {
 
         List<UserCreate> userInfo = new ArrayList<UserCreate>();
 
@@ -530,6 +531,7 @@ public class KeyStoneServiceJson implements IJsonService {
                 res.setDescription(user.getDescription());
                 res.setName(user.getName());
                 res.setEmail(user.getEmail());
+                res.setRoles(getRole(roleDelegate, authToken, user.getId()));
                 userResp.add(res);
             }
 
@@ -540,7 +542,14 @@ public class KeyStoneServiceJson implements IJsonService {
             throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
 
         }
-
+    }
+    
+    private List<RoleResponse> getRole(IRoleDelegate roleDelegate, String authToken, String userId) {
+        if(null != roleDelegate) {
+            return roleDelegate.listRolesForUser(authToken, userId).getRoles();
+        } else {
+            return null;
+        }
     }
 
     /**

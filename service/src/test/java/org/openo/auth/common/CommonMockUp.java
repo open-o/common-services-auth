@@ -38,6 +38,7 @@ import org.openo.auth.entity.keystone.resp.UserCreate;
 import org.openo.auth.entity.keystone.resp.UserCreateWrapper;
 import org.openo.auth.rest.client.TokenServiceClient;
 import org.openo.auth.rest.client.UserServiceClient;
+import org.openo.auth.service.inf.IRoleDelegate;
 
 import mockit.Mock;
 import mockit.MockUp;
@@ -176,7 +177,7 @@ public class CommonMockUp {
             }
 
             @Mock
-            public String responseForMultipleUsers(String inputJson) {
+            public String responseForMultipleUsers(String inputJson, IRoleDelegate roleDelegate, String authToken) {
                 return "json-response";
             }
 

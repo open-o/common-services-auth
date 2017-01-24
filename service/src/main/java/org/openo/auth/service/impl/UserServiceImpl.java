@@ -312,8 +312,8 @@ public class UserServiceImpl implements IUserDelegate {
 
         String respBody = resp.getBody();
 
-        if(status / 200 == 1) {
-            respBody = getJsonService().responseForMultipleUsers(resp.getBody());
+        if(status / 200 == 1 && null != roleDelegate) {
+            respBody = getJsonService().responseForMultipleUsers(resp.getBody(),roleDelegate,authToken);
         }
 
         Response res = null;
