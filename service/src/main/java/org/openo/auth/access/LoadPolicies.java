@@ -102,17 +102,4 @@ public class LoadPolicies {
         }
         return policyServices;
     }
-
-    public static void main(String[] args) throws IOException {
-        File f = new File("src/main/resources/policy");
-        System.out.println(f.getAbsolutePath());
-
-        List<ServicePolicies> list = listFilesForFolder(f);
-        for(ServicePolicies p1 : list) {
-            for(Policy p : p1.getPolicies()) {
-                System.out.println(p.getService() + "     " + p.getRule());
-            }
-        }
-    }
-
 }
