@@ -51,6 +51,13 @@
 	    <bean id="swaggerRoa" class="org.openo.auth.rest.service.SwaggerRoa">
     </bean>
 
+	<bean id="accessService" class="org.openo.auth.rest.service.AccessService">
+		<property name="accessDelegate" ref="accessDelegate"></property>
+	</bean>
+
+	<bean id="accessDelegate" class="org.openo.auth.service.impl.AccessServiceImpl">
+	</bean>
+
     <jaxrs:server id="restContainer" address="/">
         <jaxrs:serviceBeans>
             <ref bean="tokenService" />

@@ -94,7 +94,7 @@ public class LoadRights {
                 if(fileEntry.isDirectory()) {
                     listFilesForFolder(fileEntry);
                 } else {
-                    System.out.println(fileEntry.getName());
+                    LOGGER.info("file name = " + fileEntry.getName());
                     policyServices.add(policies.readValue(fileEntry, PolicyRights.class));
                 }
             }

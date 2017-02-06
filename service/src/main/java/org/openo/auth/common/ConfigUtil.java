@@ -101,9 +101,9 @@ public class ConfigUtil {
 
         conf.setService(properties.getProperty(Constant.AUTH_CONF_SERVICE));
 
-        conf.setPolicy(Constant.AUTH_CONF_POLICY);
+        conf.setPolicy(properties.getProperty(Constant.AUTH_CONF_POLICY));
 
-        conf.setRights(Constant.AUTH_CONF_RIGHTS);
+        conf.setRights(properties.getProperty(Constant.AUTH_CONF_RIGHTS));
 
         LOGGER.info("Service Name = " + conf.getService());
 

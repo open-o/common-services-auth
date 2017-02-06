@@ -116,6 +116,12 @@ public class ClientCommunicationUtil {
                     client.header(Constant.TOKEN_SUBJECT, input);
                     userResponse = client.get();
 
+                } else if(type.equals(Constant.TYPE_GET)) {
+
+                    client.header(Constant.TOKEN_AUTH, input);
+                    client.header(Constant.TOKEN_SUBJECT, input);
+                    userResponse = client.get();
+
                 }
             } catch(Exception e) {
 

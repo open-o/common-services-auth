@@ -29,7 +29,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.openo.auth.common.ConfigUtil;
 import org.openo.auth.constant.Constant;
 import org.openo.auth.constant.ErrorCode;
-import org.openo.auth.entity.Policy;
 import org.openo.auth.entity.ServicePolicies;
 import org.openo.auth.exception.AuthException;
 import org.slf4j.Logger;
@@ -95,7 +94,7 @@ public class LoadPolicies {
                 if(fileEntry.isDirectory()) {
                     listFilesForFolder(fileEntry);
                 } else {
-                    System.out.println(fileEntry.getName());
+                    LOGGER.info("file name = " + fileEntry.getName());
                     policyServices.add(policies.readValue(fileEntry, ServicePolicies.class));
                 }
             }

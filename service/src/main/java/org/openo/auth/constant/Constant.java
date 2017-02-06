@@ -23,7 +23,7 @@ package org.openo.auth.constant;
  * <br/>
  * 
  * @author
- * @version  
+ * @version
  */
 public final class Constant {
 
@@ -34,9 +34,9 @@ public final class Constant {
     public static final String AUTH_CONF_PORT = "PORT";
 
     public static final String AUTH_CONF_SERVICE = "SERVICE";
-    
+
     public static final String AUTH_CONF_POLICY = "POLICY";
-    
+
     public static final String AUTH_CONF_RIGHTS = "RIGHTS";
 
     public static final String TYPE_POST = "POST";
@@ -48,7 +48,7 @@ public final class Constant {
     public static final String TYPE_GET = "GET";
 
     public static final String TYPE_PATCH = "PATCH";
-    
+
     public static final String TYPE_PUT = "PUT";
 
     public static final String HEADER_X_TOKEN_ID = "X-Token-ID";
@@ -82,7 +82,7 @@ public final class Constant {
     public static final String KEYSTONE_IDENTITY_TOKEN = "/v3/auth/tokens";
 
     public static final String KEYSTONE_IDENTITY_USER = "/v3/users";
-    
+
     public static final String KEYSTONE_IDENTITY_ROLES = "/v3/roles";
 
     public static final String KEYSTONE_IDENTITY_PROJECTS = "/v3/projects";
@@ -96,8 +96,26 @@ public final class Constant {
     public static final String PROJECTID = "{project_id}";
 
     public static final String ROLEID = "{role_id}";
-    
+
     public static final String FORWARD_SLASH = "/";
+
+    public static final String COLON = ":";
+
+    public static final String OR = "OR";
+
+    public static final String NOT = "NOT";
+
+    public static final String ALL = "";
+
+    public static final String NONE = "!";
+    
+    public static final String EXTRACT_ROLE = "role:";
+    
+    public static final String REGEX_ROLE_FROM_RULE = "\\s+" + Constant.OR + "\\s+";
+
+    public static final String LEFT_SMALL_BRACES = "(";
+
+    public static final String RIGHT_SMALL_BRACES = ")";
 
     private Constant() {
     }

@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * <b>Currently, Auth Service supports only KeyStone Service</b>
  * 
  * @author
- * @version  
+ * @version
  */
 public class TokenServiceClient {
 
@@ -55,7 +55,7 @@ public class TokenServiceClient {
      * <br/>
      * 
      * @return instance : Returns the instance of <tt>TokenServiceClient</tt>
-     * @since  
+     * @since
      */
     public static TokenServiceClient getInstance() {
         return instance;
@@ -68,7 +68,7 @@ public class TokenServiceClient {
      * @param json : Request Body Input, to perform the operation.
      * @return response : An Object which has status header and body, for which the value is set
      *         according to the response given by the Service Client.
-     * @since  
+     * @since
      */
     public ClientResponse doLogin(String json) {
 
@@ -96,7 +96,7 @@ public class TokenServiceClient {
      * 
      * @param token : Auth token, which represents the current session.
      * @return int : returns the status for the following operation.
-     * @since  
+     * @since
      */
     public int doLogout(String token) {
 
@@ -118,7 +118,7 @@ public class TokenServiceClient {
      * 
      * @param token : Auth token, which represents the current session.
      * @return int : returns the status for the following operation.
-     * @since  
+     * @since
      */
     public int checkToken(String token) {
 
@@ -134,4 +134,17 @@ public class TokenServiceClient {
         return userResponse.getStatus();
     }
 
+    public String getTokenInfo(String token) {
+
+        LOGGER.info("Input from UI = " + token);
+
+        Response userResponse = ClientCommunicationUtil.getInstance()
+                .getResponseFromService(Constant.KEYSTONE_IDENTITY_TOKEN, token, Constant.TYPE_GET);
+
+        LOGGER.info("Response = " + userResponse);
+
+        LOGGER.info("Response body= " + userResponse.getEntity());
+
+        return (String)userResponse.getEntity();
+    }
 }
