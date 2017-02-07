@@ -63,6 +63,7 @@
             <ref bean="tokenService" />
             <ref bean="userService" />
             <ref bean="roleService" />
+            <ref bean="accessService" />
             <ref bean="swaggerRoa" />
         </jaxrs:serviceBeans>
         <jaxrs:providers>
