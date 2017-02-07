@@ -1,0 +1,13 @@
+{
+	"rights": [
+	{
+		"uri-pattern": "/auth/v1/users",
+		"method": "role:admin",
+		"action": "cs-userservice:createuser"
+	},
+	{
+		"uri-pattern": "/auth/v1/users",
+		"method": "role:admin",
+		"action": "cs-userservice:modifyuser"
+	}]
+}
