@@ -19,6 +19,7 @@ package org.openo.auth.common;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletInputStream;
@@ -240,11 +241,16 @@ public class CommonMockUp {
             @Mock
             public UserDetailsUI getUserInfo(HttpServletRequest request, HttpServletResponse response) {
                 UserDetailsUI ui = new UserDetailsUI();
+                RoleResponse role = new RoleResponse();
+                role.setId("role-id");
+                role.setName("admin");
+                List<RoleResponse> listRoles = new ArrayList<RoleResponse>();
+                listRoles.add(role);
                 ui.setEmail("auth.service@huawei.com");
                 ui.setUserName("Shubham");
                 ui.setPassword("Test1234_");
                 ui.setDescription("service_description");
-
+                ui.setRoles(listRoles);
                 return ui;
             }
 

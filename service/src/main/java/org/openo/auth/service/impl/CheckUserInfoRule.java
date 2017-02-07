@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openo.auth.constant.ErrorCode;
 import org.openo.auth.entity.RoleResponse;
 import org.openo.auth.entity.UserDetailsUI;
@@ -57,18 +58,29 @@ public class CheckUserInfoRule {
     public static void checkInfo(UserDetailsUI userInfo) {
         checkUserNameRule(userInfo.getUserName());
         checkPassword(userInfo.getPassword(), userInfo.getUserName());
+        if(null == userInfo.getRoles() || userInfo.getRoles().size() == 0) {
+            LOGGER.error("no role info provided.");
+            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
+        }
+        for(RoleResponse role : userInfo.getRoles()) {
+            checkRoleValidity(role);
+        }
+
     }
-    
+
     /**
-     * 
      * <br/>
      * 
      * @param role
      * @since
      */
-    public static void checkRoleValidity(RoleResponse role)
-    {
-        checkRoleNameRule(role.getName());
+    public static void checkRoleValidity(RoleResponse role) {
+        if(null != role) {
+            checkRoleNameRule(role.getName());
+        } else {
+            LOGGER.error("role name is empty.");
+            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
+        }
     }
 
     /**
@@ -114,18 +126,23 @@ public class CheckUserInfoRule {
      */
     private static void checkRoleNameRule(String roleName) {
 
+        if(StringUtils.isEmpty(roleName)) {
+            LOGGER.error("role name is empty.");
+            throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
+        }
+
         if(!checkLength(5, 20, roleName)) {
-            LOGGER.error("User name length is invali.");
+            LOGGER.error("role name length is invali.");
             throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
         }
 
         if(!checkName(roleName)) {
-            LOGGER.error("User name have illegal characters.");
+            LOGGER.error("role name have illegal characters.");
             throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
         }
 
         if(!checkNoSpace(roleName)) {
-            LOGGER.error("User name should not have space.");
+            LOGGER.error("role name should not have space.");
             throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
         }
 
