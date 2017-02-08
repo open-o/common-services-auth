@@ -86,7 +86,6 @@ public class AccessUtil {
         roles = pattern.split(input);
         for(int i = 0; i < roles.length; i++) {
             LOGGER.info(roles[i]);
-            System.out.print(roles[1]);
         }
         return roles;
     }
@@ -106,13 +105,29 @@ public class AccessUtil {
             for(Policy p : p1.getPolicies()) {
                 LOGGER.info("Service = {}, Rule = {} ", p.getService(), p.getRule());
                 String[] serviceAccessArray = getServiceAccessName(p.getService());
-                if(null != serviceAccessArray && serviceAccessArray.length > 0) {
-                    String serviceNameDb = serviceAccessArray[0];
-                    String accessNameDb = serviceAccessArray[1];
-                    if(serviceName.equalsIgnoreCase(serviceNameDb) && accessName.equalsIgnoreCase(accessNameDb)) {
-                        rule = p.getRule();
-                    }
-                }
+                rule = getRule(serviceName, accessName, rule, p, serviceAccessArray);
+            }
+        }
+        return rule;
+    }
+
+    /**
+     * <br/>
+     * 
+     * @param serviceName
+     * @param accessName
+     * @param rule
+     * @param p
+     * @param serviceAccessArray
+     * @return
+     * @since
+     */
+    private String getRule(String serviceName, String accessName, String rule, Policy p, String[] serviceAccessArray) {
+        if(null != serviceAccessArray && serviceAccessArray.length > 0) {
+            String serviceNameDb = serviceAccessArray[0];
+            String accessNameDb = serviceAccessArray[1];
+            if(serviceName.equalsIgnoreCase(serviceNameDb) && accessName.equalsIgnoreCase(accessNameDb)) {
+                rule = p.getRule();
             }
         }
         return rule;
@@ -130,22 +145,19 @@ public class AccessUtil {
             for(Map.Entry<String, List<String>> entry : ruleRoleMap.entrySet()) {
                 if(Constant.ALL.equalsIgnoreCase(entry.getKey())) {
                     return true;
-                }
-                if(Constant.NONE.equalsIgnoreCase(entry.getKey())) {
+                } else if(Constant.NONE.equalsIgnoreCase(entry.getKey())) {
                     return false;
-                }
-                if(Constant.OR.equalsIgnoreCase(entry.getKey())) {
+                } else if(Constant.OR.equalsIgnoreCase(entry.getKey())) {
                     List<String> listRoles = entry.getValue();
-                    if(null != roleListUser && 0 < roleListUser.size())
+                    if(null != roleListUser && !roleListUser.isEmpty())
                         for(RoleResponse roles : roleListUser) {
                             if(listRoles.contains(roles.getName())) {
                                 return true;
                             }
                         }
-                }
-                if(Constant.NOT.equalsIgnoreCase(entry.getKey())) {
+                } else if(Constant.NOT.equalsIgnoreCase(entry.getKey())) {
                     List<String> listRoles = entry.getValue();
-                    if(null != roleListUser && 0 < roleListUser.size())
+                    if(null != roleListUser && !roleListUser.isEmpty())
                         for(RoleResponse roles : roleListUser) {
                             if(listRoles.contains(Constant.NONE + roles.getName())) {
                                 return false;

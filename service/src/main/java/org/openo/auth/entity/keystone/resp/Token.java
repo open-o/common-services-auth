@@ -32,9 +32,9 @@ public class Token {
 
     class Roles {
 
-        private String id;
+        protected String id;
 
-        private String name;
+        protected String name;
 
         public String getId() {
             return id;
@@ -54,29 +54,9 @@ public class Token {
 
     }
 
-    class Project {
+    class Project extends Roles {
 
         private Domain domain;
-
-        private String id;
-
-        private String name;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
 
         public Domain getDomain() {
             return domain;

@@ -69,11 +69,10 @@ public class RoleUtil {
      * <br/>
      * 
      * @param request
-     * @param response
      * @return
      * @since
      */
-    public Role getRoleInfo(HttpServletRequest request, HttpServletResponse response) {
+    public Role getRoleInfo(HttpServletRequest request) {
 
         try {
             LOGGER.info("getRoleInfo");

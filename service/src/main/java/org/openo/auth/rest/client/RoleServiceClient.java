@@ -161,7 +161,7 @@ public class RoleServiceClient {
                     LOGGER.info("The URL is : " + webClient.getCurrentURI());
                     userResponse = webClient.delete();
                 }
-                return userResponse.getStatus();
+                return null != userResponse ? userResponse.getStatus() : null;
             } catch(Exception e) {
                 LOGGER.error("Exceptions " + e);
                 throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.COMMUNICATION_ERROR);

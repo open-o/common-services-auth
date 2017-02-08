@@ -147,7 +147,7 @@ public class UserServiceImpl implements IUserDelegate {
             userId = userWrapper.getUser().getId();
             LOGGER.info("New user created, User ID : " + userId);
         } catch(Exception ex) {
-
+            LOGGER.error("getUserIdFromNewUser exception " + ex);
         }
         return userId;
     }

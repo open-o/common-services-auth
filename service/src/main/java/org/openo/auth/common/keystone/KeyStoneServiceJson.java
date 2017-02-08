@@ -443,23 +443,37 @@ public class KeyStoneServiceJson implements IJsonService {
 
         List<RoleResponse> roleResponse = new ArrayList<RoleResponse>();
         try {
-            RolesWrapper rolesWrapper = keyStoneRespToListRoles(inputJson);
-
-            for(Roles roles : rolesWrapper.getRoles()) {
-                RoleResponse roleResp = new RoleResponse();
-                roleResp.setId(roles.getId());
-                roleResp.setName(roles.getName());
-                roleResponse.add(roleResp);
-            }
-
-            Role roles = new Role();
-            roles.setRoles(roleResponse);
+            Role roles = getRoleInfoFrmJson(inputJson, roleResponse);
             return roles;
 
         } catch(Exception e) {
             LOGGER.error("Exception Caught : " + e);
             throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
         }
+    }
+
+    /**
+     * <br/>
+     * 
+     * @param inputJson
+     * @param roleResponse
+     * @return
+     * @throws IOException
+     * @since
+     */
+    private Role getRoleInfoFrmJson(String inputJson, List<RoleResponse> roleResponse) throws IOException {
+        RolesWrapper rolesWrapper = keyStoneRespToListRoles(inputJson);
+
+        for(Roles roles : rolesWrapper.getRoles()) {
+            RoleResponse roleResp = new RoleResponse();
+            roleResp.setId(roles.getId());
+            roleResp.setName(roles.getName());
+            roleResponse.add(roleResp);
+        }
+
+        Role roles = new Role();
+        roles.setRoles(roleResponse);
+        return roles;
     }
 
     /**
@@ -476,17 +490,7 @@ public class KeyStoneServiceJson implements IJsonService {
         List<RoleResponse> roleResponse = new ArrayList<RoleResponse>();
 
         try {
-            RolesWrapper rolesWrapper = keyStoneRespToListRoles(inputJson);
-
-            for(Roles roles : rolesWrapper.getRoles()) {
-                RoleResponse roleResp = new RoleResponse();
-                roleResp.setId(roles.getId());
-                roleResp.setName(roles.getName());
-                roleResponse.add(roleResp);
-            }
-
-            Role roles = new Role();
-            roles.setRoles(roleResponse);
+            Role roles = getRoleInfoFrmJson(inputJson, roleResponse);
 
             ObjectMapper mapperWrite = new ObjectMapper();
             jsonInString = mapperWrite.writeValueAsString(roles);
@@ -543,13 +547,13 @@ public class KeyStoneServiceJson implements IJsonService {
 
         }
     }
-    
+
     private List<RoleResponse> getRole(IRoleDelegate roleDelegate, String authToken, String userId) {
+        List<RoleResponse> roleList = new ArrayList<RoleResponse>();
         if(null != roleDelegate) {
-            return roleDelegate.listRolesForUser(authToken, userId).getRoles();
-        } else {
-            return null;
+            roleList = roleDelegate.listRolesForUser(authToken, userId).getRoles();
         }
+        return roleList;
     }
 
     /**
