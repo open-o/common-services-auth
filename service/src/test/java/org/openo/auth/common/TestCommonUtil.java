@@ -90,7 +90,7 @@ public class TestCommonUtil {
                 CommonMockUp.getInstance().mockRequestInputStream(CommUtil.getInstance().getJsonString(ui));
 
         try {
-            ui = instance.getUserInfoCredential(request, response);
+            ui = instance.getUserInfoCredential(request);
         } catch(AuthException e) {
             status = e.getResponse().getStatus();
         }
@@ -102,7 +102,7 @@ public class TestCommonUtil {
 
     /**
      * Test method for
-     * {@link org.openo.auth.common.CommonUtil#getUserInfoCredential(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)}
+     * {@link org.openo.auth.common.CommonUtil#getUserInfoCredential(javax.servlet.http.HttpServletRequest)}
      * .
      */
     @Test
@@ -113,7 +113,7 @@ public class TestCommonUtil {
         HttpServletRequest request = CommonMockUp.getInstance().mockRequestInputStream("error");
 
         try {
-            instance.getUserInfoCredential(request, response);
+            instance.getUserInfoCredential(request);
         } catch(AuthException e) {
             status = e.getResponse().getStatus();
         }
@@ -123,7 +123,7 @@ public class TestCommonUtil {
 
     /**
      * Test method for
-     * {@link org.openo.auth.common.CommonUtil#getUserInfo(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)}
+     * {@link org.openo.auth.common.CommonUtil#getUserInfo(javax.servlet.http.HttpServletRequest)}
      * .
      */
     @Test
@@ -137,7 +137,7 @@ public class TestCommonUtil {
                 CommonMockUp.getInstance().mockRequestInputStream(CommUtil.getInstance().getJsonString(ui));
 
         try {
-            ui = instance.getUserInfo(request, response);
+            ui = instance.getUserInfo(request);
         } catch(AuthException e) {
             status = e.getResponse().getStatus();
         }
@@ -155,7 +155,7 @@ public class TestCommonUtil {
         HttpServletRequest request = CommonMockUp.getInstance().mockRequestInputStream("error");
 
         try {
-            instance.getUserInfo(request, response);
+            instance.getUserInfo(request);
         } catch(AuthException e) {
             status = e.getResponse().getStatus();
         }
@@ -165,7 +165,7 @@ public class TestCommonUtil {
 
     /**
      * Test method for
-     * {@link org.openo.auth.common.CommonUtil#modifyPasswordJson(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)}
+     * {@link org.openo.auth.common.CommonUtil#modifyPasswordJson(javax.servlet.http.HttpServletRequest)}
      * .
      */
     @Test
@@ -179,7 +179,7 @@ public class TestCommonUtil {
                 CommonMockUp.getInstance().mockRequestInputStream(CommUtil.getInstance().getJsonString(modifyPassword));
 
         try {
-            modifyPassword = instance.modifyPasswordJson(request, response);
+            modifyPassword = instance.modifyPasswordJson(request);
         } catch(AuthException e) {
             status = e.getResponse().getStatus();
         }
@@ -197,7 +197,7 @@ public class TestCommonUtil {
         HttpServletRequest request = CommonMockUp.getInstance().mockRequestInputStream("error");
 
         try {
-            instance.modifyPasswordJson(request, response);
+            instance.modifyPasswordJson(request);
         } catch(AuthException e) {
             status = e.getResponse().getStatus();
         }
@@ -207,7 +207,7 @@ public class TestCommonUtil {
 
     /**
      * Test method for
-     * {@link org.openo.auth.common.CommonUtil#modifyUserJson(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)}
+     * {@link org.openo.auth.common.CommonUtil#modifyUserJson(javax.servlet.http.HttpServletRequest)}
      * .
      */
     @Test
@@ -221,7 +221,7 @@ public class TestCommonUtil {
                 CommonMockUp.getInstance().mockRequestInputStream(CommUtil.getInstance().getJsonString(modifyUser));
 
         try {
-            modifyUser = instance.modifyUserJson(request, response);
+            modifyUser = instance.modifyUserJson(request);
         } catch(AuthException e) {
             status = e.getResponse().getStatus();
         }
@@ -238,7 +238,7 @@ public class TestCommonUtil {
 
         HttpServletRequest request = CommonMockUp.getInstance().mockRequestInputStream("error");
         try {
-            instance.modifyUserJson(request, response);
+            instance.modifyUserJson(request);
         } catch(AuthException e) {
             status = e.getResponse().getStatus();
         }

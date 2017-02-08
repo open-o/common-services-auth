@@ -85,7 +85,7 @@ public class AccessServiceImpl implements IAccessDelegate {
 
         Map<String, List<String>> ruleRoleMap = new HashMap<String, List<String>>();
 
-        if(null != role && null != role.getRoles() && 0 < role.getRoles().size()) {
+        if(null != role && null != role.getRoles() && !role.getRoles().isEmpty()) {
             roleListUser = role.getRoles();
         }
 
@@ -100,9 +100,11 @@ public class AccessServiceImpl implements IAccessDelegate {
 
             ruleRoleMap = AccessUtil.getInstance().getRoleWithRules(rule);
         }
-
-        return AccessUtil.getInstance().actionHasRole(roleListUser, ruleRoleMap);
-
+        if(!ruleRoleMap.isEmpty())
+            return AccessUtil.getInstance().actionHasRole(roleListUser, ruleRoleMap);
+        else {
+            return false;
+        }
     }
 
 }

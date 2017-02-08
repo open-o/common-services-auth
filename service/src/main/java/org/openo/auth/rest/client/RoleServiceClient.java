@@ -125,7 +125,7 @@ public class RoleServiceClient {
      */
     public int updateRolesToUser(String authToken, String projectId, String userId, String roleId, String type) {
 
-        String clientURL = ConfigUtil.getBaseURL();
+        Response userResponse = null;
 
         final List<Object> providerList = new ArrayList<Object>();
 
@@ -135,9 +135,9 @@ public class RoleServiceClient {
 
         LOGGER.info("Connecting The Client.");
 
-        WebClient webClient = WebClient.create(clientURL, providerList);
+        String clientURL = ConfigUtil.getBaseURL();
 
-        Response userResponse = null;
+        WebClient webClient = WebClient.create(clientURL, providerList);
 
         if(null != webClient) {
 
@@ -193,27 +193,25 @@ public class RoleServiceClient {
      */
     private ClientResponse makeResponse(Response userResponse) {
 
-        LOGGER.info("Response = " + userResponse);
-
         String body = "";
         ClientResponse response = new ClientResponse();
+        LOGGER.info("Response = " + userResponse);
 
         if(null != userResponse && userResponse.hasEntity()) {
 
             String tokenHeader = getTokenHeader(userResponse);
-            LOGGER.info("token Header = " + tokenHeader);
-
             response.setHeader(tokenHeader);
+            LOGGER.info("token Header = " + tokenHeader);
 
             InputStream responseBody = (InputStream)userResponse.getEntity();
 
             try {
                 body = IOUtils.toString(responseBody);
             } catch(IOException e) {
-                LOGGER.error("Exception caught : " + e);
+                LOGGER.error("Exception is caught : " + e);
             }
             response.setBody(body);
-            LOGGER.info("Response = " + body);
+            LOGGER.info("Response : " + body);
             response.setStatus(userResponse.getStatus());
         }
 
@@ -221,8 +219,6 @@ public class RoleServiceClient {
     }
 
     private String getUrlForRoleOperations(String authToken, String userId, String roleId) {
-
-        String url = StringUtils.EMPTY;
 
         KeyStoneConfiguration keyConf = KeyStoneConfigInitializer.getKeystoneConfiguration();
 
@@ -235,13 +231,12 @@ public class RoleServiceClient {
         }
 
         if(StringUtils.isEmpty(roleId)) {
-            url = Constant.KEYSTONE_IDENTITY_PROJECTS + Constant.FORWARD_SLASH + projectId + Constant.USERS
+            return Constant.KEYSTONE_IDENTITY_PROJECTS + Constant.FORWARD_SLASH + projectId + Constant.USERS
                     + Constant.FORWARD_SLASH + userId + Constant.ROLES;
         } else {
-            url = Constant.KEYSTONE_IDENTITY_PROJECTS + Constant.FORWARD_SLASH + projectId + Constant.USERS
+            return Constant.KEYSTONE_IDENTITY_PROJECTS + Constant.FORWARD_SLASH + projectId + Constant.USERS
                     + Constant.FORWARD_SLASH + userId + Constant.ROLES + Constant.FORWARD_SLASH + roleId;
         }
-        return url;
 
     }
 
@@ -290,7 +285,7 @@ public class RoleServiceClient {
         ProjectWrapper proj = getObjFromJson(projectJson);
         if(null != proj) {
             List<Project> projectList = proj.getProjects();
-            if(null != projectList && 0 < projectList.size()) {
+            if(null != projectList && !projectList.isEmpty()) {
                 for(Project project : projectList) {
                     if(project.getName().equalsIgnoreCase(projectName)) {
                         return project.getId();

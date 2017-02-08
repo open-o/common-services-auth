@@ -59,7 +59,7 @@ public class TokenServiceImpl implements ITokenDelegate {
      */
     public Response login(HttpServletRequest request, HttpServletResponse response) {
 
-        final UserCredentialUI userInfo = CommonUtil.getInstance().getUserInfoCredential(request, response);
+        final UserCredentialUI userInfo = CommonUtil.getInstance().getUserInfoCredential(request);
 
         final KeyStoneConfiguration keyConf = KeyStoneConfigInitializer.getKeystoneConfiguration();
 
@@ -73,7 +73,7 @@ public class TokenServiceImpl implements ITokenDelegate {
 
         Cookie authToken = new Cookie(Constant.TOKEN_AUTH, resp.getHeader());
         authToken.setPath("/");
-        authToken.setSecure(false);
+        authToken.setSecure(true);
         response.addCookie(authToken);
 
         LOGGER.info("login result status : " + status);
@@ -129,6 +129,7 @@ public class TokenServiceImpl implements ITokenDelegate {
 
         Cookie authCookie = new Cookie(Constant.TOKEN_AUTH, null);
         authCookie.setMaxAge(0);
+        authCookie.setSecure(true);
         response.addCookie(authCookie);
 
         int status = TokenServiceClient.getInstance().doLogout(authToken);

@@ -239,7 +239,7 @@ public class CommonMockUp {
         new MockUp<CommonUtil>() {
 
             @Mock
-            public UserDetailsUI getUserInfo(HttpServletRequest request, HttpServletResponse response) {
+            public UserDetailsUI getUserInfo(HttpServletRequest request) {
                 UserDetailsUI ui = new UserDetailsUI();
                 RoleResponse role = new RoleResponse();
                 role.setId("role-id");
@@ -255,7 +255,7 @@ public class CommonMockUp {
             }
 
             @Mock
-            public ModifyUser modifyUserJson(HttpServletRequest request, HttpServletResponse response) {
+            public ModifyUser modifyUserJson(HttpServletRequest request) {
                 ModifyUser mu = new ModifyUser();
                 mu.setEmail("auth.service@huawei.com");
                 mu.setDescription("service_description");
@@ -265,7 +265,7 @@ public class CommonMockUp {
             }
 
             @Mock
-            public ModifyPassword modifyPasswordJson(HttpServletRequest request, HttpServletResponse response) {
+            public ModifyPassword modifyPasswordJson(HttpServletRequest request) {
                 ModifyPassword mp = new ModifyPassword();
                 mp.setPassword("Changeme_123");
                 mp.setOriginalPassword("Test12345_");

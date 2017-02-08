@@ -92,7 +92,7 @@ public class UserServiceImpl implements IUserDelegate {
 
             LOGGER.info("authToken = " + authToken);
 
-            UserDetailsUI userInfo = CommonUtil.getInstance().getUserInfo(request, response);
+            UserDetailsUI userInfo = CommonUtil.getInstance().getUserInfo(request);
 
             LOGGER.info("userInfo UserName= " + userInfo.getUserName());
 
@@ -187,7 +187,7 @@ public class UserServiceImpl implements IUserDelegate {
 
         LOGGER.info("authToken = " + authToken);
 
-        ModifyUser modifyUser = CommonUtil.getInstance().modifyUserJson(request, response);
+        ModifyUser modifyUser = CommonUtil.getInstance().modifyUserJson(request);
         String json = getJsonService().modifyUserJson(modifyUser);
 
         LOGGER.info("json = " + json);
@@ -348,7 +348,7 @@ public class UserServiceImpl implements IUserDelegate {
 
         LOGGER.info("authToken = " + authToken);
 
-        ModifyPassword modifyPwd = CommonUtil.getInstance().modifyPasswordJson(request, response);
+        ModifyPassword modifyPwd = CommonUtil.getInstance().modifyPasswordJson(request);
 
         ClientResponse resp = UserServiceClient.getInstance().getUserDetails(userId, authToken);
 

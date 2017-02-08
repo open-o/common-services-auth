@@ -81,9 +81,8 @@ public class AccessUtil {
     }
 
     private String[] getFromRegex(String input, String regex) {
-        String[] roles = new String[input.length() / 2];
         Pattern pattern = Pattern.compile(regex);
-        roles = pattern.split(input);
+        String[] roles = pattern.split(input);
         for(int i = 0; i < roles.length; i++) {
             LOGGER.info(roles[i]);
         }
@@ -127,7 +126,7 @@ public class AccessUtil {
             String serviceNameDb = serviceAccessArray[0];
             String accessNameDb = serviceAccessArray[1];
             if(serviceName.equalsIgnoreCase(serviceNameDb) && accessName.equalsIgnoreCase(accessNameDb)) {
-                rule = p.getRule();
+                return p.getRule();
             }
         }
         return rule;
@@ -141,29 +140,53 @@ public class AccessUtil {
      * @since
      */
     public boolean actionHasRole(List<RoleResponse> roleListUser, Map<String, List<String>> ruleRoleMap) {
-        if(null != ruleRoleMap && 0 < ruleRoleMap.size()) {
-            for(Map.Entry<String, List<String>> entry : ruleRoleMap.entrySet()) {
-                if(Constant.ALL.equalsIgnoreCase(entry.getKey())) {
-                    return true;
-                } else if(Constant.NONE.equalsIgnoreCase(entry.getKey())) {
-                    return false;
-                } else if(Constant.OR.equalsIgnoreCase(entry.getKey())) {
-                    List<String> listRoles = entry.getValue();
-                    if(null != roleListUser && !roleListUser.isEmpty())
-                        for(RoleResponse roles : roleListUser) {
-                            if(listRoles.contains(roles.getName())) {
-                                return true;
-                            }
-                        }
-                } else if(Constant.NOT.equalsIgnoreCase(entry.getKey())) {
-                    List<String> listRoles = entry.getValue();
-                    if(null != roleListUser && !roleListUser.isEmpty())
-                        for(RoleResponse roles : roleListUser) {
-                            if(listRoles.contains(Constant.NONE + roles.getName())) {
-                                return false;
-                            }
-                        }
+        boolean status = true;
+        for(Map.Entry<String, List<String>> entry : ruleRoleMap.entrySet()) {
+            if(Constant.ALL.equalsIgnoreCase(entry.getKey())) {
+                return status;
+            } else if(Constant.NONE.equalsIgnoreCase(entry.getKey())) {
+                return !status;
+            } else if(Constant.OR.equalsIgnoreCase(entry.getKey())) {
+                if(hasActionOrRule(roleListUser, entry.getValue())) {
+                    return status;
                 }
+            } else if(Constant.NOT.equalsIgnoreCase(entry.getKey())) {
+                if(hasActionNoneRule(roleListUser, entry.getValue())) {
+                    return !status;
+                }
+            }
+        }
+        return !status;
+    }
+
+    /**
+     * <br/>
+     * 
+     * @param roleListUser
+     * @param entry
+     * @since
+     */
+    private boolean hasActionNoneRule(List<RoleResponse> roleListUser, List<String> listRoles) {
+        for(RoleResponse roles : roleListUser) {
+            if(listRoles.contains(Constant.NONE + roles.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * <br/>
+     * 
+     * @param roleListUser
+     * @param status
+     * @param entry
+     * @since
+     */
+    private boolean hasActionOrRule(List<RoleResponse> roleListUser, List<String> listRoles) {
+        for(RoleResponse roles : roleListUser) {
+            if(listRoles.contains(roles.getName())) {
+                return true;
             }
         }
         return false;

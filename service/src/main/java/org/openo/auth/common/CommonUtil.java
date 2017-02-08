@@ -67,12 +67,11 @@ public class CommonUtil {
      * <br/>
      * 
      * @param request : HttpServletRequest
-     * @param response : HttpServletResponse
      * @return userInfoCredential : Instance of <tt>UserCredentialUI</tt> contains username and
      *         password.
      * @since
      */
-    public UserCredentialUI getUserInfoCredential(HttpServletRequest request, HttpServletResponse response) {
+    public UserCredentialUI getUserInfoCredential(HttpServletRequest request) {
 
         try {
             LOGGER.info("getUserInfoCredential");
@@ -89,12 +88,11 @@ public class CommonUtil {
      * <br/>
      * 
      * @param request : HttpServletRequest
-     * @param response : HttpServletResponse
      * @return user : Instance of <tt> UserDetailsUI </tt> class which contains all the
      *         details given by the user.
      * @since
      */
-    public UserDetailsUI getUserInfo(HttpServletRequest request, HttpServletResponse response) {
+    public UserDetailsUI getUserInfo(HttpServletRequest request) {
 
         try {
             LOGGER.info("getUserInfo");
@@ -111,12 +109,11 @@ public class CommonUtil {
      * <br/>
      * 
      * @param request : HttpServletRequest
-     * @param response : HttpServletResponse
      * @return modifyPwd : Instance of <tt> ModifyPassword </tt> class which contains the password
      *         details.
      * @since
      */
-    public ModifyPassword modifyPasswordJson(HttpServletRequest request, HttpServletResponse response) {
+    public ModifyPassword modifyPasswordJson(HttpServletRequest request) {
 
         try {
             LOGGER.info("modify password json");
@@ -138,12 +135,11 @@ public class CommonUtil {
      * <br/>
      * 
      * @param request : HttpServletRequest
-     * @param response : HttpServletResponse
      * @return modifyUser : Instance of <tt> ModifyUser </tt> class which contains the email and
      *         description details.
      * @since
      */
-    public ModifyUser modifyUserJson(HttpServletRequest request, HttpServletResponse response) {
+    public ModifyUser modifyUserJson(HttpServletRequest request) {
 
         try {
             LOGGER.info("modify user json");

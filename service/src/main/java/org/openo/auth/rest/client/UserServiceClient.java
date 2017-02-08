@@ -230,8 +230,6 @@ public class UserServiceClient {
 
         WebClient webClient = WebClient.create(clientURL, providerList);
 
-        Response userResponse = null;
-
         if(null != webClient) {
 
             webClient.type(Constant.MEDIA_TYPE_JSON);
@@ -247,8 +245,7 @@ public class UserServiceClient {
 
             try {
                 LOGGER.info("The URL is : " + webClient.getCurrentURI());
-                userResponse = webClient.put(null);
-                return userResponse.getStatus();
+                return webClient.put(null).getStatus();
             } catch(Exception e) {
                 LOGGER.error("Exceptions " + e);
                 throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.COMMUNICATION_ERROR);
