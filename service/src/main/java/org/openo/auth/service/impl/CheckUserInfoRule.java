@@ -58,7 +58,7 @@ public class CheckUserInfoRule {
     public static void checkInfo(UserDetailsUI userInfo) {
         checkUserNameRule(userInfo.getUserName());
         checkPassword(userInfo.getPassword(), userInfo.getUserName());
-        if(null == userInfo.getRoles() || userInfo.getRoles().size() == 0) {
+        if(null == userInfo.getRoles() || userInfo.getRoles().isEmpty()) {
             LOGGER.error("no role info provided.");
             throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
         }
