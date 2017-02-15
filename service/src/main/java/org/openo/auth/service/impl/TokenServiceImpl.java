@@ -16,19 +16,24 @@
 
 package org.openo.auth.service.impl;
 
+import java.util.List;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
+import org.openo.auth.access.LoadRights;
 import org.openo.auth.common.CommonUtil;
-import org.openo.auth.common.JsonFactory;
 import org.openo.auth.common.IJsonService;
+import org.openo.auth.common.JsonFactory;
 import org.openo.auth.common.keystone.KeyStoneConfigInitializer;
 import org.openo.auth.constant.Constant;
 import org.openo.auth.constant.ErrorCode;
 import org.openo.auth.entity.ClientResponse;
+import org.openo.auth.entity.PolicyRights;
+import org.openo.auth.entity.Rights;
 import org.openo.auth.entity.UserCredentialUI;
 import org.openo.auth.entity.keystone.req.KeyStoneConfiguration;
 import org.openo.auth.exception.AuthException;
@@ -41,8 +46,8 @@ import org.slf4j.LoggerFactory;
  * An Implementation Class of token service delegate.
  * <br/>
  * 
- * @author 
- * @version  
+ * @author
+ * @version
  */
 public class TokenServiceImpl implements ITokenDelegate {
 
@@ -55,7 +60,7 @@ public class TokenServiceImpl implements ITokenDelegate {
      * @param request : HttpServletRequest Object
      * @param response : HttpServletResponse Object
      * @return response for the login operation.
-     * @since  
+     * @since
      */
     public Response login(HttpServletRequest request, HttpServletResponse response) {
 
@@ -77,12 +82,13 @@ public class TokenServiceImpl implements ITokenDelegate {
         response.addCookie(authToken);
 
         LOGGER.info("login result status : " + status);
-        
+
         LOGGER.info("login's user is : " + userInfo.getUserName());
 
         LOGGER.info("login's token is : " + resp.getHeader());
 
-        return Response.status(status).cookie(new NewCookie(Constant.TOKEN_AUTH, resp.getHeader())).entity("[]").build();
+        return Response.status(status).cookie(new NewCookie(Constant.TOKEN_AUTH, resp.getHeader())).entity("[]")
+                .header(Constant.TOKEN_AUTH, resp.getHeader()).build();
 
     }
 
@@ -146,13 +152,17 @@ public class TokenServiceImpl implements ITokenDelegate {
      * @param request : HttpServletRequest Object
      * @param response : HttpServletResponse Object
      * @return response status for the operation.
-     * @since  
+     * @since
      */
     public int checkToken(HttpServletRequest request, HttpServletResponse response) {
 
         String authToken = request.getHeader(Constant.TOKEN_AUTH);
 
-        LOGGER.info("authToken" + authToken);
+        String uriPattern = request.getHeader(Constant.URI_PATTERN);
+
+        String method = request.getHeader(Constant.METHOD);
+
+        LOGGER.info("authToken = " + authToken + ", uri = " + uriPattern + ", method =" + method);
 
         int status = TokenServiceClient.getInstance().checkToken(authToken);
 
@@ -160,6 +170,16 @@ public class TokenServiceImpl implements ITokenDelegate {
 
         return status;
 
+    }
+
+    private void check(String uriPattern, String method) {
+        List<PolicyRights> list = LoadRights.loadRights();
+        for(PolicyRights policyRights : list) {
+            for(Rights right : policyRights.getRights()) {
+                LOGGER.info("Action = " + right.getAction() + ", Method = " + right.getMethod() + ", UriPattern = "
+                        + right.getUriPattern() + "");
+            }
+        }
     }
 
 }
