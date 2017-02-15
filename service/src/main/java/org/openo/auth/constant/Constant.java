@@ -56,6 +56,10 @@ public final class Constant {
     public static final String TOKEN_AUTH = "X-Auth-Token";
 
     public static final String TOKEN_SUBJECT = "X-Subject-Token";
+    
+    public static final String URI_PATTERN = "Uri-Pattern";
+    
+    public static final String METHOD = "Method";
 
     public static final String MEDIA_TYPE_JSON = "application/json";
 
@@ -116,6 +120,12 @@ public final class Constant {
     public static final String LEFT_SMALL_BRACES = "(";
 
     public static final String RIGHT_SMALL_BRACES = ")";
+    
+    public static final String REGEX_URI_VERSIONS = "/v[\\d]/";
+    
+    public static final String REGEX_URI_OPENOAPI = "/openoapi/";
+    
+    public static final String REGEX_URI_LAST = "[[/\\w]*[{\\w}]*]*";
 
     private Constant() {
     }
