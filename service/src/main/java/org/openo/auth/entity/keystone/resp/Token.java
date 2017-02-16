@@ -30,55 +30,20 @@ import org.codehaus.jackson.annotate.JsonProperty;
  */
 public class Token {
 
-    class Roles {
-
-        protected String id;
-
-        protected String name;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-    }
-
-    class Project extends Roles {
-
-        private Domain domain;
-
-        public Domain getDomain() {
-            return domain;
-        }
-
-        public void setDomain(Domain domain) {
-            this.domain = domain;
-        }
-    }
-
-    private Roles roles;
+    private List<TokenRoles> roles;
 
     private List<String> methods;
 
     @JsonProperty("expires_at")
     private String expiresAt;
 
-    private Project project;
+    private TokenProject project;
 
-    private Catalog catalog;
+    private List<Catalog> catalog;
 
     private User user;
+
+    private Extras extras;
 
     @JsonProperty("audit_ids")
     private List<String> auditIds;
@@ -86,11 +51,11 @@ public class Token {
     @JsonProperty("issued_at")
     private String issuedAt;
 
-    public Roles getRoles() {
+    public List<TokenRoles> getRoles() {
         return roles;
     }
 
-    public void setRoles(Roles roles) {
+    public void setRoles(List<TokenRoles> roles) {
         this.roles = roles;
     }
 
@@ -110,20 +75,28 @@ public class Token {
         this.expiresAt = expiresAt;
     }
 
-    public Project getProject() {
+    public TokenProject getProject() {
         return project;
     }
 
-    public void setProject(Project project) {
+    public void setProject(TokenProject project) {
         this.project = project;
     }
 
-    public Catalog getCatalog() {
+    public List<Catalog> getCatalog() {
         return catalog;
     }
 
-    public void setCatalog(Catalog catalog) {
+    public void setCatalog(List<Catalog> catalog) {
         this.catalog = catalog;
+    }
+
+    public Extras getExtras() {
+        return extras;
+    }
+
+    public void setExtras(Extras extras) {
+        this.extras = extras;
     }
 
     public User getUser() {

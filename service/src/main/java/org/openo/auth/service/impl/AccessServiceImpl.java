@@ -23,6 +23,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Response;
 
 import org.openo.auth.common.AccessUtil;
 import org.openo.auth.common.TokenUtil;
@@ -67,11 +68,12 @@ public class AccessServiceImpl implements IAccessDelegate {
      * 
      * @param request
      * @param response
-     * @param serviceAccessName
+     * @param serviceName
      * @return
      * @since
      */
-    public boolean validateRights(HttpServletRequest request, HttpServletResponse response, String serviceAccessName) {
+    public Response validateRights(HttpServletRequest request, HttpServletResponse response, String serviceName,
+            String accessName) {
 
         String authToken = request.getHeader(Constant.TOKEN_AUTH);
 
@@ -89,22 +91,17 @@ public class AccessServiceImpl implements IAccessDelegate {
             roleListUser = role.getRoles();
         }
 
-        String[] serviceAccessArray = AccessUtil.getInstance().getServiceAccessName(serviceAccessName);
+        String rule = AccessUtil.getInstance().getRuleFromCache(serviceName, accessName);
 
-        if(null != serviceAccessArray && serviceAccessArray.length > 0) {
-
-            String serviceName = serviceAccessArray[0];
-            String accessName = serviceAccessArray[1];
-
-            String rule = AccessUtil.getInstance().getRuleFromServiceAccessCache(serviceName, accessName);
-
-            ruleRoleMap = AccessUtil.getInstance().getRoleWithRules(rule);
+        ruleRoleMap = AccessUtil.getInstance().getRoleWithRules(rule);
+        if(!ruleRoleMap.isEmpty()) {
+            if(AccessUtil.getInstance().actionHasRole(roleListUser, ruleRoleMap)) {
+                return Response.status(HttpServletResponse.SC_OK).entity(Boolean.TRUE).build();
+            } else {
+                return Response.status(HttpServletResponse.SC_UNAUTHORIZED).entity(Boolean.FALSE).build();
+            }
         }
-        if(!ruleRoleMap.isEmpty())
-            return AccessUtil.getInstance().actionHasRole(roleListUser, ruleRoleMap);
-        else {
-            return false;
-        }
+        LOGGER.info("rule role map came empty, hence true ");
+        return Response.status(HttpServletResponse.SC_OK).entity(Boolean.TRUE).build();
     }
-
 }

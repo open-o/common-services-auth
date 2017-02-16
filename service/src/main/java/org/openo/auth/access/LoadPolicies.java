@@ -73,6 +73,7 @@ public class LoadPolicies {
         try {
 
             File servicePolicyPath = new File(ConfigUtil.getPolicyPath());
+            LOGGER.info("servicePolicyPath... " + servicePolicyPath);
             servicePolicies = listFilesForFolder(servicePolicyPath);
 
         } catch(Exception e) {
@@ -88,6 +89,7 @@ public class LoadPolicies {
     private static List<ServicePolicies> listFilesForFolder(final File folder)
             throws JsonParseException, JsonMappingException, IOException {
         ObjectMapper policies = new ObjectMapper();
+        LOGGER.info("folder name = " + folder.getName() + "path " + folder.getAbsolutePath());
         List<ServicePolicies> policyServices = new ArrayList<ServicePolicies>();
         for(final File fileEntry : folder.listFiles()) {
             if(null != fileEntry) {

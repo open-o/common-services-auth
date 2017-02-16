@@ -98,7 +98,7 @@ public class TokenServiceImpl implements ITokenDelegate {
      * <br/>
      * 
      * @return jsonService : An instance of <tt>JsonService</tt> class.
-     * @since  
+     * @since
      */
     private IJsonService getJsonService() {
 
@@ -118,7 +118,7 @@ public class TokenServiceImpl implements ITokenDelegate {
      * @param request : HttpServletRequest Object
      * @param response : HttpServletResponse Object
      * @return response status for the operation.
-     * @since  
+     * @since
      */
     public int logout(HttpServletRequest request, HttpServletResponse response) {
 

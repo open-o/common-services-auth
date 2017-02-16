@@ -17,8 +17,11 @@
 package org.openo.auth.access;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.Test;
+import org.openo.auth.constant.Constant;
 import org.openo.auth.entity.PolicyRights;
 import org.openo.auth.entity.Rights;
 
@@ -44,4 +47,24 @@ public class TestLoadRights {
         }
     }
 
+
+    public static void testLoadConfigPropertiess() {
+        CommonMockUp.getInstance().mockConfigUtil();
+        List<PolicyRights> list = LoadRights.loadRights();
+        for(PolicyRights p1 : list) {
+            for(Rights right : p1.getRights()) {
+                System.out.println(right.getUriPattern() + "     " + right.getMethod());
+                if(check(right.getUriPattern(), "auth", "users/create") && "POST".equalsIgnoreCase(right.getMethod())) {
+                    System.out.print(right.getAction() + "====");
+                }
+            }
+        }
+    }
+
+    public static boolean check(String inputUri, String input1, String input2) {
+        Pattern pattern = Pattern.compile(
+                Constant.REGEX_URI_OPENOAPI + input1 + Constant.REGEX_URI_VERSIONS + input2 + Constant.REGEX_URI_LAST);
+        Matcher matcher = pattern.matcher(inputUri);
+        return matcher.matches();
+    }
 }

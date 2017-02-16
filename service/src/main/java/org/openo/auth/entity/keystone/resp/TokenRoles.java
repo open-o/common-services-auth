@@ -14,22 +14,36 @@
  * limitations under the License.
  */
 
-package org.openo.auth.service.inf;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
+package org.openo.auth.entity.keystone.resp;
 
 /**
  * <br/>
+ * <p>
+ * </p>
  * 
  * @author
  * @version
  */
-public interface IAccessDelegate {
+public class TokenRoles {
 
-    public Response validateRights(@Context HttpServletRequest request, @Context HttpServletResponse response,
-            String serviceName, String accessName);
+    private String id;
 
+    private String name;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+
+    }
 }

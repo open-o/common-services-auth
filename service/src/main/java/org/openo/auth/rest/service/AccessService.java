@@ -18,12 +18,11 @@ package org.openo.auth.rest.service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.HEAD;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 
 import org.openo.auth.service.inf.IAccessDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,11 +59,9 @@ public class AccessService {
      * @since
      */
     @HEAD
-    @Path("/{servicename}")
-    @Produces("application/json")
-    @Consumes({"application/json"})
-    public boolean validateRights(@Context HttpServletRequest request, @Context HttpServletResponse response,
-            @PathParam("servicename") String serviceName) {
-        return accessDelegate.validateRights(request, response, serviceName);
+    @Path("/{servicename}/{accessname}")
+    public Response validateRights(@Context HttpServletRequest request, @Context HttpServletResponse response,
+            @PathParam("servicename") String serviceName, @PathParam("accessname") String accessName) {
+        return accessDelegate.validateRights(request, response, serviceName, accessName);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Huawei Technologies Co., Ltd.
+ * Copyright (c) 2016-2017, Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,16 +53,16 @@ public class AccessUtil {
         return instance;
     }
 
-    public Map<String, List<String>> getRoleWithRules(String role) {
+    public Map<String, List<String>> getRoleWithRules(String rule) {
 
         Map<String, List<String>> ruleRoleMap = new HashMap<String, List<String>>();
 
-        if(StringUtils.isEmpty(role)) {
+        if(StringUtils.isEmpty(rule)) {
             ruleRoleMap.put(Constant.ALL, null);
-        } else if(null != role && 1 == role.length() && role.equalsIgnoreCase(Constant.NONE)) {
+        } else if(null != rule && 1 == rule.length() && rule.equalsIgnoreCase(Constant.NONE)) {
             ruleRoleMap.put(Constant.NONE, null);
-        } else if(null != role && role.length() > 1) {
-            String[] roles = getFromRegex(role, Constant.REGEX_ROLE_FROM_RULE);
+        } else if(null != rule && rule.length() > 1) {
+            String[] roles = getFromRegex(rule, Constant.REGEX_ROLE_FROM_RULE);
             List<String> listOr = new ArrayList<String>();
             List<String> listNot = new ArrayList<String>();
             for(String value : roles) {
@@ -89,22 +89,25 @@ public class AccessUtil {
         return roles;
     }
 
-    public String[] getServiceAccessName(String serviceAccessName) {
+    private String[] getServiceName(String serviceName) {
         String[] array = new String[2];
-        if(!StringUtils.isEmpty(serviceAccessName) && serviceAccessName.contains(Constant.COLON)) {
-            array = StringUtils.split(serviceAccessName, Constant.COLON);
+        if(!StringUtils.isEmpty(serviceName) && serviceName.contains(Constant.COLON)) {
+            array = StringUtils.split(serviceName, Constant.COLON);
         }
         return array;
     }
 
-    public String getRuleFromServiceAccessCache(String serviceName, String accessName) {
-        String rule = null;
-        List<ServicePolicies> list = LoadPolicies.loadConfigProperties();
-        for(ServicePolicies p1 : list) {
-            for(Policy p : p1.getPolicies()) {
-                LOGGER.info("Service = {}, Rule = {} ", p.getService(), p.getRule());
-                String[] serviceAccessArray = getServiceAccessName(p.getService());
-                rule = getRule(serviceName, accessName, rule, p, serviceAccessArray);
+    public String getRuleFromCache(String serviceName, String accessName) {
+        String rule = "";
+        List<ServicePolicies> servicePoliciesList = LoadPolicies.loadConfigProperties();
+        for(ServicePolicies servicePolicies : servicePoliciesList) {
+            for(Policy policy : servicePolicies.getPolicies()) {
+                LOGGER.info("Service = {}, Rule = {} ", policy.getService(), policy.getRule());
+                String[] serviceArray = getServiceName(policy.getService());
+                rule = getRule(serviceName, accessName, rule, policy, serviceArray);
+                if(!StringUtils.isEmpty(rule)) {
+                    return rule;
+                }
             }
         }
         return rule;
@@ -116,17 +119,18 @@ public class AccessUtil {
      * @param serviceName
      * @param accessName
      * @param rule
-     * @param p
+     * @param policy
      * @param serviceAccessArray
      * @return
      * @since
      */
-    private String getRule(String serviceName, String accessName, String rule, Policy p, String[] serviceAccessArray) {
+    private String getRule(String serviceName, String accessName, String rule, Policy policy,
+            String[] serviceAccessArray) {
         if(null != serviceAccessArray && serviceAccessArray.length > 0) {
             String serviceNameDb = serviceAccessArray[0];
             String accessNameDb = serviceAccessArray[1];
             if(serviceName.equalsIgnoreCase(serviceNameDb) && accessName.equalsIgnoreCase(accessNameDb)) {
-                return p.getRule();
+                return policy.getRule();
             }
         }
         return rule;

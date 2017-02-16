@@ -16,8 +16,13 @@
 
 package org.openo.auth.rest.client;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.cxf.helpers.IOUtils;
 import org.openo.auth.constant.Constant;
 import org.openo.auth.entity.ClientResponse;
 import org.slf4j.Logger;
@@ -138,13 +143,22 @@ public class TokenServiceClient {
 
         LOGGER.info("Input from UI = " + token);
 
+        String tokenInfo = StringUtils.EMPTY;
+
         Response userResponse = ClientCommunicationUtil.getInstance()
                 .getResponseFromService(Constant.KEYSTONE_IDENTITY_TOKEN, token, Constant.TYPE_GET);
 
         LOGGER.info("Response = " + userResponse);
 
-        LOGGER.info("Response body= " + userResponse.getEntity());
+        InputStream responseBody = (InputStream)userResponse.getEntity();
 
-        return (String)userResponse.getEntity();
+        try {
+            tokenInfo = IOUtils.toString(responseBody);
+            LOGGER.info("Response body= " + tokenInfo);
+        } catch(IOException e) {
+            LOGGER.error("Exception is caught : " + e);
+        }
+
+        return tokenInfo;
     }
 }

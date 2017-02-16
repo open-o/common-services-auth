@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openo.auth.constant.ErrorCode;
 import org.openo.auth.entity.keystone.resp.Token;
+import org.openo.auth.entity.keystone.resp.TokenWrapper;
 import org.openo.auth.exception.AuthException;
 import org.openo.auth.rest.client.TokenServiceClient;
 import org.slf4j.Logger;
@@ -52,16 +53,16 @@ public class TokenUtil {
 
     public String getUserIdFromToken(String authToken) {
         String tokenInfoJson = TokenServiceClient.getInstance().getTokenInfo(authToken);
-        Token tokenInfo = getUserId(tokenInfoJson);
+        Token tokenInfo = getUserId(tokenInfoJson).getToken();
         return tokenInfo.getUser().getId();
     }
 
-    private Token getUserId(String json) {
+    private TokenWrapper getUserId(String json) {
 
         try {
             LOGGER.info("getUserInfo");
             ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(json, Token.class);
+            return mapper.readValue(json, TokenWrapper.class);
         } catch(IOException e) {
             LOGGER.info("Exception Caught : " + e);
             throw new AuthException(HttpServletResponse.SC_BAD_REQUEST, ErrorCode.FAILURE_INFORMATION);
