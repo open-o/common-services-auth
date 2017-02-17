@@ -25,6 +25,7 @@ import java.util.List;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Response;
 
 import org.openo.auth.common.keystone.KeyStoneConfigInitializer;
 import org.openo.auth.common.keystone.KeyStoneServiceJson;
@@ -39,6 +40,7 @@ import org.openo.auth.entity.keystone.resp.UserCreate;
 import org.openo.auth.entity.keystone.resp.UserCreateWrapper;
 import org.openo.auth.rest.client.TokenServiceClient;
 import org.openo.auth.rest.client.UserServiceClient;
+import org.openo.auth.service.impl.TokenServiceImpl;
 import org.openo.auth.service.inf.IRoleDelegate;
 
 import mockit.Mock;
@@ -229,6 +231,19 @@ public class CommonMockUp {
             @Mock
             public int checkToken(String token) {
                 return HttpServletResponse.SC_OK;
+            }
+        };
+
+    }
+
+    public void mockTokenServiceImpl() {
+
+        new MockUp<TokenServiceImpl>() {
+
+            @Mock
+            public Response hasAccess(HttpServletRequest request, HttpServletResponse response, String uriPattern,
+                    String method) {
+                return Response.status(HttpServletResponse.SC_OK).entity(Boolean.TRUE).build();
             }
         };
 

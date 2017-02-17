@@ -32,6 +32,7 @@
 	</bean>
 
 	<bean id="tokenDelegate" class="org.openo.auth.service.impl.TokenServiceImpl">
+		<property name="accessDelegate" ref="accessDelegate"></property>
 	</bean>
 
 	<bean id="userService" class="org.openo.auth.rest.service.UserService">

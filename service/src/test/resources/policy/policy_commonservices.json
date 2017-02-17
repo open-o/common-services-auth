@@ -1,16 +1,21 @@
 {
-	"policies": [
-	{
+	"policies": [{
 		"service": "cs-userservice:createuser",
 		"rule": "role:admin"
-	},
-	{
+	}, {
 		"service": "cs-userservice:modifyuser",
 		"rule": "role:admin"
-	},
-	{
+	}, {
 		"service": "cs-userservice:listuser",
 		"rule": "role:admin"
-	}
-	]
+	}, {
+		"service": "cs-userservice:deleteuser",
+		"rule": "role:admin"
+	}, {
+		"service": "cs-userservice:listroles",
+		"rule": "role:admin"
+	}, {
+		"service": "cs-userservice:modifypassword",
+		"rule": "role:admin"
+	}]
 }

@@ -16,31 +16,31 @@
 
 package org.openo.auth.service.impl;
 
-import java.util.List;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
-import org.openo.auth.access.LoadRights;
+import org.apache.commons.lang3.StringUtils;
+import org.openo.auth.common.AccessUtil;
 import org.openo.auth.common.CommonUtil;
 import org.openo.auth.common.IJsonService;
 import org.openo.auth.common.JsonFactory;
+import org.openo.auth.common.UrlMapping;
 import org.openo.auth.common.keystone.KeyStoneConfigInitializer;
 import org.openo.auth.constant.Constant;
 import org.openo.auth.constant.ErrorCode;
 import org.openo.auth.entity.ClientResponse;
-import org.openo.auth.entity.PolicyRights;
-import org.openo.auth.entity.Rights;
 import org.openo.auth.entity.UserCredentialUI;
 import org.openo.auth.entity.keystone.req.KeyStoneConfiguration;
 import org.openo.auth.exception.AuthException;
 import org.openo.auth.rest.client.TokenServiceClient;
+import org.openo.auth.service.inf.IAccessDelegate;
 import org.openo.auth.service.inf.ITokenDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * An Implementation Class of token service delegate.
@@ -52,6 +52,17 @@ import org.slf4j.LoggerFactory;
 public class TokenServiceImpl implements ITokenDelegate {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TokenServiceImpl.class);
+
+    @Autowired
+    IAccessDelegate accessDelegate;
+
+    public IAccessDelegate getAccessDelegate() {
+        return accessDelegate;
+    }
+
+    public void setAccessDelegate(IAccessDelegate accessDelegate) {
+        this.accessDelegate = accessDelegate;
+    }
 
     /**
      * Perform Login Operation.
@@ -154,7 +165,7 @@ public class TokenServiceImpl implements ITokenDelegate {
      * @return response status for the operation.
      * @since
      */
-    public int checkToken(HttpServletRequest request, HttpServletResponse response) {
+    public Response checkToken(HttpServletRequest request, HttpServletResponse response) {
 
         String authToken = request.getHeader(Constant.TOKEN_AUTH);
 
@@ -166,20 +177,30 @@ public class TokenServiceImpl implements ITokenDelegate {
 
         int status = TokenServiceClient.getInstance().checkToken(authToken);
 
-        response.setStatus(status);
-
-        return status;
-
+        if(status / 200 == 1) {
+            LOGGER.info("Keystone has validated and given success");
+            if(StringUtils.isEmpty(uriPattern) || StringUtils.isEmpty(method)) {
+                return Response.status(HttpServletResponse.SC_OK).entity(Boolean.TRUE).build();
+            } else {
+                return hasAccess(request, response, uriPattern, method);
+            }
+        } else {
+            LOGGER.info("Keystone has validated and given unauthorized");
+            return Response.status(HttpServletResponse.SC_UNAUTHORIZED).entity(Boolean.FALSE).build();
+        }
     }
 
-    private void check(String uriPattern, String method) {
-        List<PolicyRights> list = LoadRights.loadRights();
-        for(PolicyRights policyRights : list) {
-            for(Rights right : policyRights.getRights()) {
-                LOGGER.info("Action = " + right.getAction() + ", Method = " + right.getMethod() + ", UriPattern = "
-                        + right.getUriPattern() + "");
-            }
+    public Response hasAccess(HttpServletRequest request, HttpServletResponse response, String uriPattern,
+            String method) {
+        String serviceActionName = UrlMapping.getInstance().getServiceActions(uriPattern, method);
+
+        if(serviceActionName.isEmpty()) {
+            return Response.status(HttpServletResponse.SC_OK).entity(Boolean.TRUE).build();
+        } else {
+            String[] servieAction = AccessUtil.getInstance().getServiceName(serviceActionName);
+            return accessDelegate.validateRights(request, response, servieAction[0], servieAction[1]);
         }
+
     }
 
 }

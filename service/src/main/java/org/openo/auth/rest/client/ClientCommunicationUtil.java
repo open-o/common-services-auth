@@ -112,7 +112,7 @@ public class ClientCommunicationUtil {
 
                 } else if(type.equals(Constant.TYPE_HEAD)) {
 
-                    client.header(Constant.TOKEN_AUTH, keyConf.getAdminToken());
+                    client.header(Constant.TOKEN_AUTH, input);
                     client.header(Constant.TOKEN_SUBJECT, input);
                     userResponse = client.get();
 

@@ -26,7 +26,7 @@ import javax.ws.rs.core.Response;
  * <br/>
  * 
  * @author
- * @version  
+ * @version
  */
 public interface ITokenDelegate {
 
@@ -37,7 +37,7 @@ public interface ITokenDelegate {
      * @param request : HttpServletRequest Object
      * @param response : HttpServletResponse Object
      * @return response for the login operation.
-     * @since  
+     * @since
      */
     @POST
     Response login(HttpServletRequest request, HttpServletResponse response);
@@ -49,7 +49,7 @@ public interface ITokenDelegate {
      * @param request : HttpServletRequest Object
      * @param response : HttpServletResponse Object
      * @return response status for the operation.
-     * @since  
+     * @since
      */
     int logout(HttpServletRequest request, HttpServletResponse response);
 
@@ -60,7 +60,7 @@ public interface ITokenDelegate {
      * @param request : HttpServletRequest Object
      * @param response : HttpServletResponse Object
      * @return response status for the operation.
-     * @since  
+     * @since
      */
-    int checkToken(HttpServletRequest request, HttpServletResponse response);
+    Response checkToken(HttpServletRequest request, HttpServletResponse response);
 }

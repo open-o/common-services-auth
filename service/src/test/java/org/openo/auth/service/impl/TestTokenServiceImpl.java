@@ -28,15 +28,13 @@ import org.openo.auth.common.CommUtil;
 import org.openo.auth.common.CommonMockUp;
 import org.openo.auth.entity.UserCredentialUI;
 
-//import mockit.Mockit;
-
 /**
  * <br/>
  * <p>
  * </p>
  * 
  * @author
- * @version   Jul 26, 2016
+ * @version Jul 26, 2016
  */
 public class TestTokenServiceImpl {
 
@@ -50,7 +48,7 @@ public class TestTokenServiceImpl {
      * <br/>
      * 
      * @throws java.lang.Exception
-     * @since  
+     * @since
      */
     @Before
     public void setUp() throws Exception {
@@ -63,7 +61,7 @@ public class TestTokenServiceImpl {
      * <br/>
      * 
      * @throws java.lang.Exception
-     * @since  
+     * @since
      */
     @After
     public void tearDown() throws Exception {
@@ -127,9 +125,11 @@ public class TestTokenServiceImpl {
 
         CommonMockUp.getInstance().mockTokenClientCheckToken();
 
-        int res = instance.checkToken(request, response);
+        CommonMockUp.getInstance().mockTokenServiceImpl();
 
-        Assert.assertEquals("ok", HttpServletResponse.SC_OK, res);
+        Response res = instance.checkToken(request, response);
+
+        Assert.assertEquals("ok", HttpServletResponse.SC_OK, res.getStatus());
 
     }
 

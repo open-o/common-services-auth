@@ -52,7 +52,7 @@ public class AccessUtil {
     public static AccessUtil getInstance() {
         return instance;
     }
-
+    
     public Map<String, List<String>> getRoleWithRules(String rule) {
 
         Map<String, List<String>> ruleRoleMap = new HashMap<String, List<String>>();
@@ -89,8 +89,8 @@ public class AccessUtil {
         return roles;
     }
 
-    private String[] getServiceName(String serviceName) {
-        String[] array = new String[2];
+    public String[] getServiceName(String serviceName) {
+        String[] array = new String[] {"", ""};
         if(!StringUtils.isEmpty(serviceName) && serviceName.contains(Constant.COLON)) {
             array = StringUtils.split(serviceName, Constant.COLON);
         }

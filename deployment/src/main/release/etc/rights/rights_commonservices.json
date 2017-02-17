@@ -1,13 +1,33 @@
 {
 	"rights": [
 	{
-		"uri-pattern": "/auth/v1/users",
-		"method": "role:admin",
+		"uri-pattern": "/openoapi/auth/v1/users",
+		"method": "POST",
 		"action": "cs-userservice:createuser"
 	},
 	{
-		"uri-pattern": "/auth/v1/users",
-		"method": "role:admin",
+		"uri-pattern": "/openoapi/auth/v1/users",
+		"method": "PUT",
 		"action": "cs-userservice:modifyuser"
+	},
+	{
+		"uri-pattern": "/openoapi/auth/v1/users",
+		"method": "GET",
+		"action": "cs-userservice:listuser"
+	},
+	{
+		"uri-pattern": "/openoapi/auth/v1/users",
+		"method": "DELETE",
+		"action": "cs-userservice:deleteuser"
+	},
+	{
+		"uri-pattern": "/openoapi/auth/v1/roles",
+		"method": "GET",
+		"action": "cs-userservice:listroles"
+	},
+	{
+		"uri-pattern": "/openoapi/auth/v1/users/{userid}/password",
+		"method": "POST",
+		"action": "cs-userservice:modifypassword"
 	}]
 }

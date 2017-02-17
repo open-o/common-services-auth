@@ -50,36 +50,40 @@ public class UrlMapping {
         return instance;
     }
 
-    public List<String> getServiceActions(String uriPatternValidate, String methodType) {
+    public String getServiceActions(String uriPatternValidate, String methodType) {
+        /*
+         * Ex : uriPatternValidate = /openoapi/auth/v1/users
+         * moduleName = auth
+         * serviceName = users
+         */
         String moduleName = getModuleNameFromUri(uriPatternValidate);
         String serviceName = getServiceNameFromUri(uriPatternValidate);
-        List<String> actions = new ArrayList<String>();
         List<PolicyRights> list = LoadRights.loadRights();
         for(PolicyRights policies : list) {
             for(Rights right : policies.getRights()) {
-                if(isUriMatching(right.getUriPattern(), moduleName, serviceName)
-                        && methodType.equalsIgnoreCase(right.getMethod())) {
-                    actions.add(right.getAction());
+                String pattern = right.getUriPattern();
+                if(pattern.contains("{")) {
+                    pattern = pattern.replaceAll("{", StringUtils.EMPTY);
+                    pattern = pattern.replaceAll("}", StringUtils.EMPTY);
+                }
+                if(isUriMatching(pattern, moduleName, serviceName) && methodType.equalsIgnoreCase(right.getMethod())) {
+                    return right.getAction();
                 }
             }
         }
-        LOGGER.info("Actions fetched" + actions);
-        return actions;
+        LOGGER.info("url and method combo not matched, considering access for all");
+        return StringUtils.EMPTY;
     }
 
-  /*  public static void main(String[] args) {
-
-        System.out.println("/openoapi/auth/v1/users/create".split(Constant.REGEX_URI_VERSIONS)[0]
-                .split(Constant.FORWARD_SLASH)[1]);
-        System.out.println("/openoapi/auth/v1/users/create".split(Constant.REGEX_URI_VERSIONS)[1]);
-    }*/
+   
 
     private String getModuleNameFromUri(String uriPattern) {
         String uri = uriPattern.split(Constant.REGEX_URI_VERSIONS)[0];
         String moduleName = StringUtils.EMPTY;
         if(!StringUtils.isEmpty(uri)) {
-
-            moduleName = uri.split(Constant.FORWARD_SLASH)[uri.length() - 1];
+            LOGGER.info("getModuleNameFromUri : uri " + uri);
+            moduleName = uri.split(Constant.REGEX_URI_OPENOAPI)[1];
+            LOGGER.info("getModuleNameFromUri : moduleName " + moduleName);
         }
         return moduleName;
 
@@ -90,6 +94,16 @@ public class UrlMapping {
     }
 
     private boolean isUriMatching(String inputUri, String input1, String input2) {
+
+        LOGGER.info("getModuleNameFromUri : input2 " + input2);
+
+        /*
+         * Replacing '{' , '}' to "" (Empty String) and extracting the service url
+         */
+        if(input2.contains("{")) {
+            input2 = input2.replace("{", StringUtils.EMPTY);
+            input2 = input2.replace("}", StringUtils.EMPTY);
+        }
         Pattern pattern = Pattern.compile(
                 Constant.REGEX_URI_OPENOAPI + input1 + Constant.REGEX_URI_VERSIONS + input2 + Constant.REGEX_URI_LAST);
         Matcher matcher = pattern.matcher(inputUri);

@@ -37,7 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * <br/>
  * 
  * @author
- * @version  
+ * @version
  */
 @Path("/auth/v1/tokens")
 public class TokenService {
@@ -60,7 +60,7 @@ public class TokenService {
      * @param request : HttpServletRequest Object
      * @param response : HttpServletResponse Object
      * @return response for the login operation.
-     * @since  
+     * @since
      */
     @POST
     @Produces("application/json")
@@ -76,7 +76,7 @@ public class TokenService {
      * @param request : HttpServletRequest Object
      * @param response : HttpServletResponse Object
      * @return response status for the operation.
-     * @since  
+     * @since
      */
     @DELETE
     public int logout(@Context HttpServletRequest request, @Context HttpServletResponse response) {
@@ -90,10 +90,10 @@ public class TokenService {
      * @param request : HttpServletRequest Object
      * @param response : HttpServletResponse Object
      * @return response status for the operation.
-     * @since  
+     * @since
      */
     @HEAD
-    public int checkToken(@Context HttpServletRequest request, @Context HttpServletResponse response) {
+    public Response checkToken(@Context HttpServletRequest request, @Context HttpServletResponse response) {
         return tokenDelegate.checkToken(request, response);
     }
 }
