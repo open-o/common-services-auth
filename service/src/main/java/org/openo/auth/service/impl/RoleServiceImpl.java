@@ -34,9 +34,11 @@ import org.openo.auth.entity.Role;
 import org.openo.auth.entity.RoleResponse;
 import org.openo.auth.exception.AuthException;
 import org.openo.auth.rest.client.RoleServiceClient;
+import org.openo.auth.service.inf.IAccessDelegate;
 import org.openo.auth.service.inf.IRoleDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Provide the implementation for the role functionalities for the Auth Services.
@@ -48,6 +50,17 @@ import org.slf4j.LoggerFactory;
 public class RoleServiceImpl implements IRoleDelegate {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RoleServiceImpl.class);
+
+    @Autowired
+    IAccessDelegate accessDelegate;
+
+    public IAccessDelegate getAccessDelegate() {
+        return accessDelegate;
+    }
+
+    public void setAccessDelegate(IAccessDelegate accessDelegate) {
+        this.accessDelegate = accessDelegate;
+    }
 
     /**
      * <br/>
@@ -67,6 +80,15 @@ public class RoleServiceImpl implements IRoleDelegate {
 
             LOGGER.info("authToken = " + authToken);
 
+            if(null != accessDelegate) {
+                Response accessResponse = accessDelegate.validateRights(request, response, Constant.CS_USERSERVICE,
+                        Constant.OPERATION_LISTROLES);
+
+                if(accessResponse.getStatus() / 200 != 1) {
+                    LOGGER.info("access blocked by aut service, check policy and rights json");
+                    return accessResponse;
+                }
+            }
             ClientResponse resp = RoleServiceClient.getInstance().listAllRoles(authToken);
 
             int status = resp.getStatus();
@@ -143,7 +165,7 @@ public class RoleServiceImpl implements IRoleDelegate {
                 LOGGER.info("Role Information ---> Role Name = {} , Role Id = {}", role.getName(), role.getId());
                 CheckUserInfoRule.checkRoleValidity(role);
             }
-            RoleUtil.getInstance().truncateValues(); 
+            RoleUtil.getInstance().truncateValues();
             RoleUtil.getInstance().validateRolesForUser(authToken, userId, roleInfo, isNewUser);
 
             if(!isNewUser) {
@@ -152,7 +174,7 @@ public class RoleServiceImpl implements IRoleDelegate {
                 Map<String, String> roleToAssign = RoleUtil.getInstance().getRoleToAssign();
 
                 Map<String, String> roleToDelete = RoleUtil.getInstance().getRoleToDelete();
-                
+
                 LOGGER.error("roleToAssign = {}, roleToDelete = {}", roleToAssign, roleToDelete);
 
                 Map<String, ClientResponse> roleDeleteResponse =

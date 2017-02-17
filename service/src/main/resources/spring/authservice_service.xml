@@ -41,6 +41,7 @@
 
 	<bean id="userDelegate" class="org.openo.auth.service.impl.UserServiceImpl">
 		<property name="roleDelegate" ref="roleDelegate"></property>
+		<property name="accessDelegate" ref="accessDelegate"></property>
 	</bean>
 
 	<bean id="roleService" class="org.openo.auth.rest.service.RoleService">
@@ -59,6 +60,7 @@
 	</bean>
 
 	<bean id="roleDelegate" class="org.openo.auth.service.impl.RoleServiceImpl">
+		<property name="accessDelegate" ref="accessDelegate"></property>
 	</bean>
 
 	<jaxrs:server id="restContainer" address="/">

@@ -16,7 +16,6 @@
 
 package org.openo.auth.common;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -75,15 +74,13 @@ public class UrlMapping {
         return StringUtils.EMPTY;
     }
 
-   
-
     private String getModuleNameFromUri(String uriPattern) {
         String uri = uriPattern.split(Constant.REGEX_URI_VERSIONS)[0];
         String moduleName = StringUtils.EMPTY;
         if(!StringUtils.isEmpty(uri)) {
-            LOGGER.info("getModuleNameFromUri : uri " + uri);
+            LOGGER.info("getModuleNameFromUri : uri = " + uri);
             moduleName = uri.split(Constant.REGEX_URI_OPENOAPI)[1];
-            LOGGER.info("getModuleNameFromUri : moduleName " + moduleName);
+            LOGGER.info("getModuleNameFromUri : moduleName = " + moduleName);
         }
         return moduleName;
 
@@ -95,7 +92,7 @@ public class UrlMapping {
 
     private boolean isUriMatching(String inputUri, String input1, String input2) {
 
-        LOGGER.info("getModuleNameFromUri : input2 " + input2);
+        LOGGER.info("getModuleNameFromUri : inputUri " + inputUri + " input2 = " + input2);
 
         /*
          * Replacing '{' , '}' to "" (Empty String) and extracting the service url

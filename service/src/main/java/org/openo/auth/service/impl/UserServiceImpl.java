@@ -39,6 +39,7 @@ import org.openo.auth.entity.keystone.req.KeyStoneConfiguration;
 import org.openo.auth.entity.keystone.resp.UserCreateWrapper;
 import org.openo.auth.exception.AuthException;
 import org.openo.auth.rest.client.UserServiceClient;
+import org.openo.auth.service.inf.IAccessDelegate;
 import org.openo.auth.service.inf.IRoleDelegate;
 import org.openo.auth.service.inf.IUserDelegate;
 import org.slf4j.Logger;
@@ -59,16 +60,21 @@ public class UserServiceImpl implements IUserDelegate {
     @Autowired
     IRoleDelegate roleDelegate;
 
-    /**
-     * @return Returns the roleDelegate.
-     */
+    @Autowired
+    IAccessDelegate accessDelegate;
+
+    public IAccessDelegate getAccessDelegate() {
+        return accessDelegate;
+    }
+
+    public void setAccessDelegate(IAccessDelegate accessDelegate) {
+        this.accessDelegate = accessDelegate;
+    }
+
     public IRoleDelegate getRoleDelegate() {
         return roleDelegate;
     }
 
-    /**
-     * @param roleDelegate The roleDelegate to set.
-     */
     public void setRoleDelegate(IRoleDelegate roleDelegate) {
         this.roleDelegate = roleDelegate;
     }
@@ -91,6 +97,15 @@ public class UserServiceImpl implements IUserDelegate {
             String authToken = request.getHeader(Constant.TOKEN_AUTH);
 
             LOGGER.info("authToken = " + authToken);
+            if(null != accessDelegate) {
+                Response accessResponse = accessDelegate.validateRights(request, response, Constant.CS_USERSERVICE,
+                        Constant.OPERATION_CREATEUSER);
+
+                if(accessResponse.getStatus() / 200 != 1) {
+                    LOGGER.info("access blocked by aut service, check policy and rights json");
+                    return accessResponse;
+                }
+            }
 
             UserDetailsUI userInfo = CommonUtil.getInstance().getUserInfo(request);
 
@@ -186,7 +201,15 @@ public class UserServiceImpl implements IUserDelegate {
         String authToken = request.getHeader(Constant.TOKEN_AUTH);
 
         LOGGER.info("authToken = " + authToken);
+        if(null != accessDelegate) {
+            Response accessResponse = accessDelegate.validateRights(request, response, Constant.CS_USERSERVICE,
+                    Constant.OPERATION_MODIFYUSER);
 
+            if(accessResponse.getStatus() / 200 != 1) {
+                LOGGER.info("access blocked by aut service, check policy and rights json");
+                return accessResponse;
+            }
+        }
         ModifyUser modifyUser = CommonUtil.getInstance().modifyUserJson(request);
         String json = getJsonService().modifyUserJson(modifyUser);
 
@@ -239,7 +262,15 @@ public class UserServiceImpl implements IUserDelegate {
         String authToken = request.getHeader(Constant.TOKEN_AUTH);
 
         LOGGER.info("authToken" + authToken);
+        if(null != accessDelegate) {
+            Response accessResponse = accessDelegate.validateRights(request, response, Constant.CS_USERSERVICE,
+                    Constant.OPERATION_DELETEUSER);
 
+            if(accessResponse.getStatus() / 200 != 1) {
+                LOGGER.info("access blocked by aut service, check policy and rights json");
+                return accessResponse.getStatus();
+            }
+        }
         int status = UserServiceClient.getInstance().deleteUser(userId, authToken);
 
         response.setStatus(status);
@@ -264,6 +295,15 @@ public class UserServiceImpl implements IUserDelegate {
 
         LOGGER.info("authToken = " + authToken);
 
+        if(null != accessDelegate) {
+            Response accessResponse = accessDelegate.validateRights(request, response, Constant.CS_USERSERVICE,
+                    Constant.OPERATION_LISTUSER);
+
+            if(accessResponse.getStatus() / 200 != 1) {
+                LOGGER.info("access blocked by aut service, check policy and rights json");
+                return accessResponse;
+            }
+        }
         ClientResponse resp = UserServiceClient.getInstance().getUserDetails(userId, authToken);
 
         int status = resp.getStatus();
@@ -304,6 +344,16 @@ public class UserServiceImpl implements IUserDelegate {
 
         LOGGER.info("authToken = " + authToken);
 
+        if(null != accessDelegate) {
+            Response accessResponse = accessDelegate.validateRights(request, response, Constant.CS_USERSERVICE,
+                    Constant.OPERATION_LISTUSER);
+
+            if(accessResponse.getStatus() / 200 != 1) {
+                LOGGER.info("access blocked by aut service, check policy and rights json");
+                return accessResponse;
+            }
+        }
+
         ClientResponse resp = UserServiceClient.getInstance().getUserDetails(authToken);
 
         int status = resp.getStatus();
@@ -313,7 +363,7 @@ public class UserServiceImpl implements IUserDelegate {
         String respBody = resp.getBody();
 
         if(status / 200 == 1 && null != roleDelegate) {
-            respBody = getJsonService().responseForMultipleUsers(resp.getBody(),roleDelegate,authToken);
+            respBody = getJsonService().responseForMultipleUsers(resp.getBody(), roleDelegate, authToken);
         }
 
         Response res = null;
@@ -347,6 +397,16 @@ public class UserServiceImpl implements IUserDelegate {
         UserCreateWrapper user = null;
 
         LOGGER.info("authToken = " + authToken);
+
+        if(null != accessDelegate) {
+            Response accessResponse = accessDelegate.validateRights(request, response, Constant.CS_USERSERVICE,
+                    Constant.KEYSTONE_METHOD_PASSWORD);
+
+            if(accessResponse.getStatus() / 200 != 1) {
+                LOGGER.info("access blocked by aut service, check policy and rights json");
+                return accessResponse.getStatus();
+            }
+        }
 
         ModifyPassword modifyPwd = CommonUtil.getInstance().modifyPasswordJson(request);
 

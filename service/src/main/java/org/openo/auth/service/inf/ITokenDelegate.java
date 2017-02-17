@@ -63,4 +63,5 @@ public interface ITokenDelegate {
      * @since
      */
     Response checkToken(HttpServletRequest request, HttpServletResponse response);
+
 }
