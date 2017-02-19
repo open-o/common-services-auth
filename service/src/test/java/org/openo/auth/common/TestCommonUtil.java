@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Huawei Technologies Co., Ltd.
+ * Copyright 2016-2017 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,32 +35,29 @@ import org.openo.auth.exception.AuthException;
  * </p>
  * 
  * @author
- * @version  
+ * @version
  */
 
 public class TestCommonUtil {
 
     private CommonUtil instance;
 
-    private HttpServletResponse response;
-
     /**
      * <br/>
      * 
      * @throws java.lang.Exception
-     * @since  
+     * @since
      */
     @Before
     public void setUp() throws Exception {
         instance = CommonUtil.getInstance();
-        response = CommonMockUp.getInstance().mockHttpServletResponse();
     }
 
     /**
      * <br/>
      * 
      * @throws java.lang.Exception
-     * @since  
+     * @since
      */
     @After
     public void tearDown() throws Exception {

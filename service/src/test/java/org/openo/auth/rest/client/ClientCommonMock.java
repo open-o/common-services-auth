@@ -73,9 +73,6 @@ public class ClientCommonMock {
     
     public void mockRoleServiceClient() {
 
-        final Response response =
-                getResponse(HttpServletResponse.SC_OK, Constant.TOKEN_SUBJECT, "tokenValue", "entity");
-
         new MockUp<RoleServiceClient>() {
 
             @Mock

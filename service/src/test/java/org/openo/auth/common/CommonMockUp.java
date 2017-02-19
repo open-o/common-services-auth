@@ -19,25 +19,38 @@ package org.openo.auth.common;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.openo.auth.common.keystone.KeyStoneConfigInitializer;
 import org.openo.auth.common.keystone.KeyStoneServiceJson;
+import org.openo.auth.constant.Constant;
 import org.openo.auth.entity.ClientResponse;
 import org.openo.auth.entity.Configuration;
 import org.openo.auth.entity.ModifyPassword;
 import org.openo.auth.entity.ModifyUser;
+import org.openo.auth.entity.Role;
 import org.openo.auth.entity.RoleResponse;
 import org.openo.auth.entity.UserDetailsUI;
 import org.openo.auth.entity.keystone.req.KeyStoneConfiguration;
+import org.openo.auth.entity.keystone.resp.Domain;
+import org.openo.auth.entity.keystone.resp.ProjectWrapper;
+import org.openo.auth.entity.keystone.resp.Token;
+import org.openo.auth.entity.keystone.resp.TokenWrapper;
+import org.openo.auth.entity.keystone.resp.User;
 import org.openo.auth.entity.keystone.resp.UserCreate;
 import org.openo.auth.entity.keystone.resp.UserCreateWrapper;
+import org.openo.auth.rest.client.ClientCommunicationUtil;
+import org.openo.auth.rest.client.RoleServiceClient;
 import org.openo.auth.rest.client.TokenServiceClient;
 import org.openo.auth.rest.client.UserServiceClient;
 import org.openo.auth.service.impl.TokenServiceImpl;
@@ -182,6 +195,11 @@ public class CommonMockUp {
             @Mock
             public String responseForMultipleUsers(String inputJson, IRoleDelegate roleDelegate, String authToken) {
                 return "json-response";
+            }
+
+            @Mock
+            public Role roleJsonToRoleObj(String inputJson) {
+                return new Role();
             }
 
         };
@@ -461,6 +479,263 @@ public class CommonMockUp {
 
         };
         return keyConf;
+    }
+
+    public void mockRoleServiceClient() {
+        new MockUp<RoleServiceClient>() {
+
+            @Mock
+            public ClientResponse listAllRoles(String authToken) {
+                ClientResponse client = new ClientResponse();
+                client.setStatus(HttpServletResponse.SC_OK);
+                client.setBody("");
+                return client;
+            }
+
+            @Mock
+            public ClientResponse listRolesForUser(String authToken, String userId) {
+
+                ClientResponse client = new ClientResponse();
+                client.setStatus(HttpServletResponse.SC_OK);
+                client.setBody("");
+                return client;
+
+            }
+
+            @Mock
+            public int updateRolesToUser(String authToken, String projectId, String userId, String roleId,
+                    String type) {
+                return 0;
+            }
+
+            @Mock
+            private String getTokenHeader(Response userResponse) {
+                return "";
+            }
+
+            @Mock
+            private ClientResponse makeResponse(Response userResponse) {
+
+                ClientResponse client = new ClientResponse();
+                client.setStatus(HttpServletResponse.SC_OK);
+                client.setBody("");
+                return client;
+
+            }
+
+            @Mock
+            private String getUrlForRoleOperations(String authToken, String userId, String roleId) {
+                return "";
+            }
+
+            @Mock
+            public Map<String, ClientResponse> removeRolesFromUser(String authToken, String userId,
+                    Map<String, String> rolesToRemove) {
+                return null;
+            }
+
+            @Mock
+            public Map<String, ClientResponse> assignRolesToUser(String authToken, String userId,
+                    Map<String, String> rolesToAssign) {
+                return null;
+            }
+
+            @Mock
+            private String getProjectIdFromName(String authToken, String projectName) {
+                return "";
+            }
+
+            @Mock
+            private ProjectWrapper getObjFromJson(String inputJson) {
+                return null;
+            }
+
+            @Mock
+            private void writeToKeyConfProperties(String projectId) {
+                return;
+            }
+
+            @Mock
+            public ClientResponse getProjectDetails(String authToken) {
+
+                ClientResponse client = new ClientResponse();
+                client.setStatus(HttpServletResponse.SC_OK);
+                client.setBody("");
+                return client;
+
+            }
+
+        };
+    }
+
+    public void mockRoleServiceClientException() {
+        new MockUp<RoleServiceClient>() {
+
+            @Mock
+            public ClientResponse listAllRoles(String authToken) {
+                ClientResponse client = new ClientResponse();
+                client.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                client.setBody("");
+                return client;
+            }
+
+            @Mock
+            public ClientResponse listRolesForUser(String authToken, String userId) {
+
+                ClientResponse client = new ClientResponse();
+                client.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                client.setBody("");
+                return client;
+
+            }
+
+            @Mock
+            public int updateRolesToUser(String authToken, String projectId, String userId, String roleId,
+                    String type) {
+                return 0;
+            }
+
+            @Mock
+            private String getTokenHeader(Response userResponse) {
+                return "";
+            }
+
+            @Mock
+            private ClientResponse makeResponse(Response userResponse) {
+
+                ClientResponse client = new ClientResponse();
+                client.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                client.setBody("");
+                return client;
+
+            }
+
+            @Mock
+            private String getUrlForRoleOperations(String authToken, String userId, String roleId) {
+                return "";
+            }
+
+            @Mock
+            public Map<String, ClientResponse> removeRolesFromUser(String authToken, String userId,
+                    Map<String, String> rolesToRemove) {
+                return null;
+            }
+
+            @Mock
+            public Map<String, ClientResponse> assignRolesToUser(String authToken, String userId,
+                    Map<String, String> rolesToAssign) {
+                return null;
+            }
+
+            @Mock
+            private String getProjectIdFromName(String authToken, String projectName) {
+                return "";
+            }
+
+            @Mock
+            private ProjectWrapper getObjFromJson(String inputJson) {
+                return null;
+            }
+
+            @Mock
+            private void writeToKeyConfProperties(String projectId) {
+                return;
+            }
+
+            @Mock
+            public ClientResponse getProjectDetails(String authToken) {
+
+                ClientResponse client = new ClientResponse();
+                client.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                client.setBody("");
+                return client;
+
+            }
+
+        };
+    }
+
+    public void mockRoleUtil() {
+        new MockUp<RoleUtil>() {
+
+            @Mock
+            private void validateRolesForUser(Role allRoles, Role existingRoles, List<RoleResponse> rolesToUpdate,
+                    boolean isNewUser) {
+            }
+
+        };
+
+    }
+
+    public void mockTokenServiceClient() throws Exception {
+
+        /*
+         * new MockUp<TokenServiceClient>() {
+         * @Mock
+         * public String getTokenInfo(String token) {
+         * TokenWrapper tokenWrapper = new TokenWrapper();
+         * Token tokens = new Token();
+         * tokens.setAuditIds(null);
+         * tokens.setCatalog(null);
+         * tokens.setExpiresAt(StringUtils.EMPTY);
+         * tokens.setExtras(null);
+         * tokens.setIssuedAt(null);
+         * tokens.setMethods(null);
+         * tokens.setProject(null);
+         * tokens.setRoles(null);
+         * User user = new User();
+         * Domain domain = new Domain();
+         * user.setDomain(domain);
+         * user.setId("user-id");
+         * user.setName("user-name");
+         * tokens.setUser(user);
+         * tokenWrapper.setToken(tokens);
+         * String tokenjson = StringUtils.EMPTY;
+         * ObjectMapper mapper = new ObjectMapper();
+         * try {
+         * tokenjson = mapper.writeValueAsString(tokenWrapper);
+         * } catch(Exception e) {
+         * }
+         * return tokenjson;
+         * }
+         * };
+         */
+
+        new MockUp<ClientCommunicationUtil>() {
+
+            @Mock
+            public Response getResponseFromService(String url, String input, String type) {
+                TokenWrapper tokenWrapper = new TokenWrapper();
+                Token tokens = new Token();
+                tokens.setAuditIds(null);
+                tokens.setCatalog(null);
+                tokens.setExpiresAt(StringUtils.EMPTY);
+                tokens.setExtras(null);
+                tokens.setIssuedAt(null);
+                tokens.setMethods(null);
+                tokens.setProject(null);
+                tokens.setRoles(null);
+                User user = new User();
+                Domain domain = new Domain();
+                user.setDomain(domain);
+                user.setId("user-id");
+                user.setName("user-name");
+                tokens.setUser(user);
+                tokenWrapper.setToken(tokens);
+                String tokenjson = StringUtils.EMPTY;
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    tokenjson = mapper.writeValueAsString(tokenWrapper);
+                } catch(Exception e) {
+                }
+                InputStream inp = new ByteArrayInputStream(tokenjson.getBytes());
+                Response response =
+                        Response.status(200).entity(inp).header(Constant.TOKEN_AUTH, "auth-Token").build();
+                return response;
+            }
+
+        };
+
     }
 
 }

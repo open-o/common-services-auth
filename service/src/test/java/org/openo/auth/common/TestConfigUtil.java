@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Huawei Technologies Co., Ltd.
+ * Copyright 2016-2017 Huawei Technologies Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.openo.auth.entity.Configuration;
 import org.openo.auth.exception.AuthException;
 
+import mockit.Deencapsulation;
 import mockit.Mock;
 import mockit.MockUp;
 //import mockit.Mockit;
@@ -97,6 +98,45 @@ public class TestConfigUtil {
         }
 
         Assert.assertEquals("ok", "Keystone", serviceName);
+
+        Assert.assertEquals("ok", HttpServletResponse.SC_OK, status);
+
+    }
+    
+    @Test
+    public void testGetPolicyPath() {
+
+        String policyPath = "";
+
+        int status = HttpServletResponse.SC_OK;
+
+        try {
+            policyPath = ConfigUtil.getPolicyPath();
+        } catch(AuthException e) {
+            status = e.getResponse().getStatus();
+        }
+
+        Assert.assertEquals("ok", "etc/policy", policyPath);
+
+        Assert.assertEquals("ok", HttpServletResponse.SC_OK, status);
+
+    }
+    
+    
+    @Test
+    public void testGetRightsPath() {
+        
+        String rightPath = "";
+
+        int status = HttpServletResponse.SC_OK;
+
+        try {
+            rightPath = ConfigUtil.getRightsPath();
+        } catch(AuthException e) {
+            status = e.getResponse().getStatus();
+        }
+
+        Assert.assertEquals("ok", "etc/rights", rightPath);
 
         Assert.assertEquals("ok", HttpServletResponse.SC_OK, status);
 
