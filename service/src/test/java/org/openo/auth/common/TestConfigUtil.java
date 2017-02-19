@@ -102,45 +102,6 @@ public class TestConfigUtil {
         Assert.assertEquals("ok", HttpServletResponse.SC_OK, status);
 
     }
-    
-    @Test
-    public void testGetPolicyPath() {
-
-        String policyPath = "";
-
-        int status = HttpServletResponse.SC_OK;
-
-        try {
-            policyPath = ConfigUtil.getPolicyPath();
-        } catch(AuthException e) {
-            status = e.getResponse().getStatus();
-        }
-
-        Assert.assertEquals("ok", "etc/policy", policyPath);
-
-        Assert.assertEquals("ok", HttpServletResponse.SC_OK, status);
-
-    }
-    
-    
-    @Test
-    public void testGetRightsPath() {
-        
-        String rightPath = "";
-
-        int status = HttpServletResponse.SC_OK;
-
-        try {
-            rightPath = ConfigUtil.getRightsPath();
-        } catch(AuthException e) {
-            status = e.getResponse().getStatus();
-        }
-
-        Assert.assertEquals("ok", "etc/rights", rightPath);
-
-        Assert.assertEquals("ok", HttpServletResponse.SC_OK, status);
-
-    }
 
     /**
      * <br/>
